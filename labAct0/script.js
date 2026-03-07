@@ -1,31 +1,31 @@
 class Student {
-    constructor(name) {
-        this.name = name;
-        this.isPresent = null;
-    }
+  constructor(name) {
+    this.name = name;
+    this.isPresent = null;
+  }
 }
 
-const studentInput = document.getElementById('studentInput');
-const addBtn = document.getElementById('addBtn');
-const attendanceList = document.getElementById('attendanceList');
+const studentInput = document.getElementById("studentInput");
+const addBtn = document.getElementById("addBtn");
+const attendanceList = document.getElementById("attendanceList");
 
-addBtn.addEventListener('click', () => {
-    const name = studentInput.value.trim();
-    if (name === "") {
-        alert("Please enter a student name.");
-        return;
-    }
+addBtn.addEventListener("click", () => {
+  const name = studentInput.value.trim();
+  if (name === "") {
+    alert("Please enter a student name.");
+    return;
+  }
 
-    const newStudent = new Student(name);
-    console.log(newStudent);
-    renderStudent(newStudent);
-    studentInput.value = "";
+  const newStudent = new Student(name);
+  console.log(newStudent);
+  renderStudent(newStudent);
+  studentInput.value = "";
 });
 
 function renderStudent(student) {
-    const li = document.createElement('li');
-    
-    li.innerHTML = `
+  const li = document.createElement("li");
+
+  li.innerHTML = `
         <span class="student-info">
             <span class="name">${student.name}</span>
             <span class="status"></span>
@@ -37,24 +37,23 @@ function renderStudent(student) {
         </div>
     `;
 
-    const statusSpan = li.querySelector('.status');
-    li.querySelector('.btn-present').addEventListener('click', () => {
-        student.isPresent = true;
-        statusSpan.innerHTML = " (Present)";
-        statusSpan.className = "status status-present";
-        li.classList.remove('bg-absent');
-    });
+  const statusSpan = li.querySelector(".status");
+  li.querySelector(".btn-present").addEventListener("click", () => {
+    student.isPresent = true;
+    statusSpan.innerHTML = " (Present)";
+    statusSpan.className = "status status-present";
+    li.classList.add("bg-present");
+    li.classList.remove("bg-absent");
+  });
 
-    // Mark Absent Logic
-    li.querySelector('.btn-absent').addEventListener('click', () => {
-        student.isPresent = false;
-        statusSpan.innerHTML = " (Absent)";
-        statusSpan.className = "status status-absent";
-        li.classList.add('bg-absent');
-    });
+  li.querySelector(".btn-absent").addEventListener("click", () => {
+    student.isPresent = false;
+    statusSpan.innerHTML = " (Absent)";
+    statusSpan.className = "status status-absent";
+    li.classList.add("bg-absent");
+    li.classList.remove("bg-present");
+  });
+  li.querySelector(".btn-remove").addEventListener("click", () => li.remove());
 
-    // Remove Logic
-    li.querySelector('.btn-remove').addEventListener('click', () => li.remove());
-
-    attendanceList.appendChild(li);
+  attendanceList.appendChild(li);
 }
