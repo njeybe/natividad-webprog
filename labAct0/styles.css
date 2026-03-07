@@ -1,49 +1,99 @@
 body {
   background-color: #f0f9f6;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
 }
 
 .container {
   background: white;
-  max-width: 600px;
+  max-width: 750px;
   margin: 50px auto;
-  padding: 30px;
+  padding: 40px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
+h2 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
 .subtitle {
   color: #888;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .input-group {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 30px;
 }
 
 input {
   flex: 1;
-  padding: 12px;
-  border: 1px solid #ddd;
+  min-width: 0;
+  padding: 12px 15px;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
   outline: none;
 }
 
+#addBtn {
+  background-color: #107c52;
+  flex-shrink: 0;
+}
+
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 15px 20px;
+  border: 1px solid #f1f3f5;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  gap: 20px;
+}
+
+
+.student-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: 5px; 
+  flex: 1; 
+  min-width: 0;
+}
+
+.name {
+  font-size: 1.1rem;
+  color: #333;
+  overflow-wrap: break-word;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
 button {
   border: none;
   border-radius: 8px;
   color: white;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 10px 18px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-#addBtn {
-  background-color: #107c52;
-}
 .btn-present {
-  background-color: #1d72e2;
+  background-color: #1971e6;
 }
 .btn-absent {
   background-color: #ffa500;
@@ -52,29 +102,37 @@ button {
   background-color: #d93025;
 }
 
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
+/* Status & Backgrounds */
 .status-present {
-  color: #1d6edb;
+  color: #1971e6;
   font-weight: bold;
 }
 .status-absent {
   color: #ffa500;
   font-weight: bold;
 }
+
 .bg-present {
-  background-color: #e7f3ff;
-  border-color: #bbdefb;
+  background-color: #f0f7ff;
+  border-color: #cfe2ff;
 }
 .bg-absent {
-  background-color: #fffdf0;
-  border-color: #ffeeba;
+  background-color: #fff9db;
+  border-color: #fff3bf;
+}
+
+/* Mobile View */
+@media (max-width: 650px) {
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .actions button {
+    flex: 1;
+    font-size: 0.8rem;
+  }
 }
