@@ -1,16 +1,16 @@
-// Class Creation
+// 1. Class Creation
 class Student {
-    constructor(name) {
-        this.name = name;
-        this.isPresent = null; // null = undecided, true = Present, false = Absent
-    }
+  constructor(name) {
+    this.name = name;
+    this.isPresent = null;
+  }
 }
 
-const studentInput = document.getElementById('studentInput');
-const addBtn = document.getElementById('addBtn');
-const attendanceList = document.getElementById('attendanceList');
+const studentInput = document.getElementById("studentInput");
+const addBtn = document.getElementById("addBtn");
+const attendanceList = document.getElementById("attendanceList");
 
-// Capture input and add student
+// 2. Capture input and add student
 addBtn.addEventListener('click', () => {
     const name = studentInput.value.trim();
     
@@ -24,39 +24,36 @@ addBtn.addEventListener('click', () => {
     studentInput.value = ""; // Clear input
 });
 
- // Append to List & Handle Actions
+// 3. Append to List & Handle Actions
 function addStudentToUI(student) {
     const li = document.createElement('li');
     
     li.innerHTML = `
         <span class="name-text">${student.name}</span>
         <div class="actions">
-            <button class="btn-present">✅</button>
-            <button class="btn-absent">❌</button>
-            <button class="btn-remove">🗑️</button>
+            <button class="btn-present">Mark Present</button>
+            <button class="btn-absent">Mark Absent</button>
+            <button class="btn-remove">Remove</button>
         </div>
     `;
 
-    const nameSpan = li.querySelector('.name-text');
+  const statusSpan = li.querySelector(".status");
+  li.querySelector(".btn-present").addEventListener("click", () => {
+    student.isPresent = true;
+    statusSpan.innerHTML = " (Present)";
+    statusSpan.className = "status status-present";
+    li.classList.add("bg-present");
+    li.classList.remove("bg-absent");
+  });
 
-    // Mark Present
-    li.querySelector('.btn-present').addEventListener('click', () => {
-        student.isPresent = true;
-        nameSpan.className = "name-text present";
-        console.log(`${student.name} is now Present:`, student);
-    });
+  li.querySelector(".btn-absent").addEventListener("click", () => {
+    student.isPresent = false;
+    statusSpan.innerHTML = " (Absent)";
+    statusSpan.className = "status status-absent";
+    li.classList.add("bg-absent");
+    li.classList.remove("bg-present");
+  });
+  li.querySelector(".btn-remove").addEventListener("click", () => li.remove());
 
-    // Mark Absent
-    li.querySelector('.btn-absent').addEventListener('click', () => {
-        student.isPresent = false;
-        nameSpan.className = "name-text absent";
-        console.log(`${student.name} is now Absent:`, student);
-    });
-
-    // Remove Entry
-    li.querySelector('.btn-remove').addEventListener('click', () => {
-        li.remove();
-    });
-
-    attendanceList.appendChild(li);
+  attendanceList.appendChild(li);
 }
