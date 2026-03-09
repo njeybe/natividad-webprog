@@ -1,4 +1,4 @@
-// 1. Class Creation
+// Class Creation
 class Student {
     constructor(name) {
         this.name = name;
@@ -10,7 +10,7 @@ const studentInput = document.getElementById('studentInput');
 const addBtn = document.getElementById('addBtn');
 const attendanceList = document.getElementById('attendanceList');
 
-// 2. Capture input and add student
+// Capture input and add student
 addBtn.addEventListener('click', () => {
     const name = studentInput.value.trim();
     
@@ -24,7 +24,7 @@ addBtn.addEventListener('click', () => {
     studentInput.value = ""; // Clear input
 });
 
-// 3. Append to List & Handle Actions
+ // Append to List & Handle Actions
 function addStudentToUI(student) {
     const li = document.createElement('li');
     
