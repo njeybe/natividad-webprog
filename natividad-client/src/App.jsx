@@ -11,8 +11,10 @@ function App() {
           <p>
             Name: Joseph Brian Natividad <br/>
             Email: natividadjd@students.national-u.edu.ph <br/>
-            Other Personal Info: 3rd Year BSIT Student
+            Other Personal Info: 3rd Year BSIT Student <br/>
+            <a href="https://github.com/njeybe/natividad-webprog">GitHub Repository</a>
           </p>
+          
         </header>
       </div>
     </>
