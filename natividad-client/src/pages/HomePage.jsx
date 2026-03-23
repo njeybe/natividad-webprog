@@ -7,14 +7,15 @@ const HomePage = () => {
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
-              Hero Section
+              Backend Developer
             </p>
             <h1 className="max-w-xl text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">
-              Welcome to Wireframe Studio Layout
+              Architecting Scalable & Secure Server Solutions.
             </h1>
             <p className="mt-4 max-w-lg text-sm leading-7 text-zinc-600 sm:text-base">
-              Discover the art of wireframing with a simple layout system for
-              hero content, key numbers, and feature cards.
+              I specialize building robust server-side logic, designing
+              efficient data base schemas, and developing secure APIs that power
+              seamless digital experience.  
             </p>
             <div className="mt-6">
               <Button to="/about" variant="primary">
