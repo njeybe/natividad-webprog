@@ -62,7 +62,7 @@ const ArticlePage = () => {
             <h3 className="mt-2 text-lg font-semibold text-zinc-900 leading-snug">
               TodaGo Dispatch Logic
             </h3>
-            <p className="mt-3 text-sm leading-6 text-zinc-600 flex-grow">
+            <p className="mt-3 text-sm leading-6 text-zinc-600 grow">
               Designing the backend architecture for our AI-powered
               tricycle-hailing platform.
             </p>
@@ -79,7 +79,7 @@ const ArticlePage = () => {
             <h3 className="mt-2 text-lg font-semibold text-zinc-900 leading-snug">
               Healthcare Logistics
             </h3>
-            <p className="mt-3 text-sm leading-6 text-zinc-600 flex-grow">
+            <p className="mt-3 text-sm leading-6 text-zinc-600 grow">
               Key takeaways from building the GoRocky PH system during a 2025
               hackathon.
             </p>
@@ -97,7 +97,7 @@ const ArticlePage = () => {
             <h3 className="mt-2 text-lg font-semibold text-zinc-900 leading-snug">
               NU Specialization
             </h3>
-            <p className="mt-3 text-sm leading-6 text-zinc-600 flex-grow">
+            <p className="mt-3 text-sm leading-6 text-zinc-600 grow">
               Exploring the connection between Flutter mobile apps and MERN web
               platforms.
             </p>
