@@ -22,7 +22,7 @@ const Button = ({
 
   if (to) {
     return (
-      <Link to={to} className={className}>
+      <Link to={to} className={classes}>
         {children}
       </Link>
     );
