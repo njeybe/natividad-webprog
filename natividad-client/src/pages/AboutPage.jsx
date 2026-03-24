@@ -7,14 +7,14 @@ const AboutPage = () => {
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="rounded-3xl border-2 border-dashed border-zinc-300 bg-zinc-100 p-6">
             <div className="flex min-h-72 items-center justify-center rounded-[1.25rem] bg-zinc-900 text-indigo-400 font-mono text-xs p-6 shadow-inner">
-               <div className="space-y-1">
-                  <p className="text-zinc-500">// System Profile</p>
-                  <p>const developer = &#123;</p>
-                  <p className="ml-4">name: "JB Natividad",</p>
-                  <p className="ml-4">specialization: "Mobile & Web",</p>
-                  <p className="ml-4">goal: "Backend Engineer"</p>
-                  <p>&#125;;</p>
-               </div>
+              <div className="space-y-1">
+                <p className="text-zinc-500">// System Profile</p>
+                <p>const developer = &#123;</p>
+                <p className="ml-4">name: "JB Natividad",</p>
+                <p className="ml-4">specialization: "Mobile & Web",</p>
+                <p className="ml-4">goal: "Backend Engineer"</p>
+                <p>&#125;;</p>
+              </div>
             </div>
           </div>
 
@@ -26,13 +26,15 @@ const AboutPage = () => {
               Joseph Brian Natividad: Aspiring Backend Developer.
             </h1>
             <p className="mt-4 max-w-lg text-sm leading-7 text-zinc-600 sm:text-base">
-              I am currently a 3rd-year student at National University specializing 
-              in Mobile and Web Applications. My focus is on building efficient 
-              server-side logic and managing the systems that power modern 
-              applications.
+              I am currently a 3rd-year student at National University
+              specializing in Mobile and Web Applications. My focus is on
+              building efficient server-side logic and managing the systems that
+              power modern applications.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button to="/" variant="primary">Back Home</Button>
+              <Button to="/" variant="primary">
+                Back Home
+              </Button>
               <Button to="/article">Learning Logs</Button>
             </div>
           </div>
@@ -63,7 +65,8 @@ const AboutPage = () => {
             </p>
           </div>
           <div className="rounded-3xl border-2 border-zinc-900 bg-zinc-100 p-5">
-            <p className="text-2xl font-bold text-zinc-900">Windows</p> {/* Updated from Linux */}
+            <p className="text-2xl font-bold text-zinc-900">Windows</p>{" "}
+            {/* Updated from Linux */}
             <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-500">
               Environment
             </p>
@@ -93,7 +96,7 @@ const AboutPage = () => {
                   TodaGo (Capstone Project)
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-zinc-600">
-                  Developing an AI-powered tricycle dispatching platform as part 
+                  Developing an AI-powered tricycle dispatching platform as part
                   of my Mobile and Web Application specialization.
                 </p>
               </article>
@@ -103,8 +106,8 @@ const AboutPage = () => {
                   Backend Foundations
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-zinc-600">
-                  Actively studying database management and API design 
-                  on my ASUS Zenbook to build robust web applications.
+                  Actively studying database management and API design to build
+                  robust web applications.
                 </p>
               </article>
             </div>
