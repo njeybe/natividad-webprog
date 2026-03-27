@@ -89,7 +89,8 @@ const AboutPage = () => {
             <h2 className="mt-2 text-2xl font-semibold text-zinc-900">
               Specialization Experience
             </h2>
-
+             
+             
             <div className="mt-6 space-y-4">
               <article className="rounded-3xl border-2 border-zinc-900 bg-zinc-100 p-5">
                 <h3 className="text-lg font-semibold text-zinc-900">
