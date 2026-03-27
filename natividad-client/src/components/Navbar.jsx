@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import Logo from "../assets/images/Logo.png";
+import logo from "../assets/images/Logo.png";
 
 const links = [
   { label: "Home", to: "/" },
@@ -21,7 +21,7 @@ const NavBar = () => {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <NavLink to="/" className="flex items-center gap-3">
           <div className="space-y-0.5">
-            <img src={Logo} alt="My Logo" className="md:w-30 md:h-15" />
+            <img src={logo} alt="My Logo" className="md:w-30 md:h-15 object-contain" />
           </div>
         </NavLink>
 

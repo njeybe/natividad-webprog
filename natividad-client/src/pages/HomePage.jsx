@@ -1,4 +1,5 @@
 import Button from "../components/Button";
+import fullLogo from "../assets/images/fullLogo.png"; // Placeholder for your backend graphic
 
 const HomePage = () => {
   const stats = [
@@ -20,15 +21,9 @@ const HomePage = () => {
             </p>
             <div className="mt-6"><Button to="/about" variant="primary">Learn More</Button></div>
           </div>
-
-          <div className="rounded-3xl border-2 border-dashed border-zinc-300 bg-zinc-900 p-6">
-            <div className="flex min-h-65 items-center justify-center rounded-[1.25rem] bg-zinc-800 font-mono text-[10px] text-indigo-300 p-4">
-              <div className="space-y-1">
-                <p>const app = express();</p>
-                <p>app.get('/', (req, res) =&gt; &#123;</p>
-                <p className="ml-4">res.send('Backend Active');</p>
-                <p>&#125;);</p>
-              </div>
+          <div className="rounded-3xl border-2 border-dashed border-zinc-300 bg-zinc-100 p-4">
+            <div className="flex aspect-video w-full items-center justify-center overflow-hidden rounded-[1.25rem] bg-zinc-200 border-2 border-zinc-900">
+              <img src={fullLogo} alt="Backend Visual" className="h-70 w-70 object-contain" />
             </div>
           </div>
         </div>
@@ -51,11 +46,11 @@ const HomePage = () => {
           {['GitHub', 'LinkedIn', 'Gmail'].map((platform) => (
             <article key={platform} className="rounded-3xl border-2 border-zinc-900 bg-zinc-100 p-4">
               <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] bg-zinc-200">
-                <div className="h-12 w-12 border-2 border-zinc-900 bg-zinc-100 flex items-center justify-center font-bold">{platform[0]}</div>
+                <div className="h-12 w-12 border-2 border-zinc-900 bg-zinc-100 flex items-center justify-center font-bold text-xl">{platform[0]}</div>
               </div>
               <h3 className="mt-4 text-lg font-semibold text-zinc-900">{platform}</h3>
-              <p className="mt-3 text-sm leading-6 text-zinc-600">Connect with me for professional inquiries and collaborations.</p>
-              <Button className="mt-4" variant="primary">Visit Profile</Button>
+              <p className="mt-3 text-sm leading-6 text-zinc-600">Connect with me for collaborations and project inquiries.</p>
+              <Button className="mt-4" variant="primary">Visit</Button>
             </article>
           ))}
         </div>
