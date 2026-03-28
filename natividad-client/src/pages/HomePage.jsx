@@ -1,5 +1,5 @@
 import Button from "../components/Button";
-import fullLogo from "../assets/images/fullLogo.png"; // Placeholder for your backend graphic
+import fullLogo from "../assets/images/fullLogo.png";
 
 const HomePage = () => {
   const stats = [
