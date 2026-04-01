@@ -20,7 +20,7 @@ const articles = [
     ],
   },
   {
-    name: "ract-components-lifecycle",
+    name: "react-components-lifecycle",
     title: "React Component Lifecycle",
     content: [
       "Class components have lifecycle methods: mounting, updating, unmounting.",

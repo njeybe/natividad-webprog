@@ -14,7 +14,7 @@ const AboutPage = () => {
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">About Me</p>
             <h1 className="text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">JB Natividad: Mobile & Web Specialist.</h1>
             <p className="mt-4 text-sm leading-7 text-zinc-600">I am a 3rd-year student at National University. I specialize in Mobile and Web Applications and aim to build high-performance backend systems.</p>
-            <div className="mt-6 flex gap-3"><Button to="/" variant="primary">Home</Button><Button to="/article">Articles</Button></div>
+            <div className="mt-6 flex gap-3"><Button to="/" variant="primary">Home</Button><Button to="/articles">Articles</Button></div>
           </div>
         </div>
       </section>

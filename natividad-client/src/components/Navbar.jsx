@@ -4,7 +4,7 @@ import logo from "../assets/images/Logo.png";
 const links = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
-  { label: "Articles", to: "/article" },
+  { label: "Articles", to: "/articles" },
 ];
 
 const navLinkClassName = ({ isActive }) =>
