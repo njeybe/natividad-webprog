@@ -4,7 +4,7 @@ import Button from "./Button";
 const ArticleList = ({ articles }) => {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {articles.map((articles, index) => (
+      {articles.map((article, index) => (
         <article
           key={article.name}
           className="rounded=3xl border-2 border-zinc-900 bg-zinc-100 p-4"
@@ -29,3 +29,5 @@ const ArticleList = ({ articles }) => {
     </div>
   );
 };
+
+export default ArticleList;
