@@ -25,7 +25,7 @@ const routes = [
         element: <ArticleListPage />,
       },
       {
-        path: "articles/:name",
+        path: "article/:name",
         element: <ArticlePage />,
       },
     ],
