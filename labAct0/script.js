@@ -1,4 +1,3 @@
-// Class Creation
 class Student {
   constructor(name) {
     this.name = name;
@@ -10,25 +9,22 @@ const studentInput = document.getElementById("studentInput");
 const addBtn = document.getElementById("addBtn");
 const attendanceList = document.getElementById("attendanceList");
 
-// Capture input and add student
-addBtn.addEventListener('click', () => {
-    const name = studentInput.value.trim();
-    
-    if (name === "") return; // Don't add empty names
+addBtn.addEventListener("click", () => {
+  const name = studentInput.value.trim();
 
-    // Instantiate new Student object
-    const newStudent = new Student(name);
-    console.log("New Student Object:", newStudent);
+  if (name === "") return;
 
-    addStudentToUI(newStudent);
-    studentInput.value = ""; // Clear input
+  const newStudent = new Student(name);
+  console.log("New Student Object:", newStudent);
+
+  addStudentToUI(newStudent);
+  studentInput.value = "";
 });
 
-// Append to List & Handle Actions
 function addStudentToUI(student) {
-    const li = document.createElement('li');
-    
-    li.innerHTML = `
+  const li = document.createElement("li");
+
+  li.innerHTML = `
         <span class="name-text">${student.name}</span>
         <span class="status"></span>
         <div class="actions">
