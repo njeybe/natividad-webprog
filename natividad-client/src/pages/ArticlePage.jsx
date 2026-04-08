@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
 import articles from "../assets/article-content.js";
+import NotFoundPage from "./NotFoundPage.jsx";
 
 function ArticlePage() {
   const { name } = useParams();
@@ -8,16 +9,7 @@ function ArticlePage() {
 
   if (!article) {
     return (
-      <div className="flex w-full flex-col gap-6">
-        <section className="border-y-2 border-zinc-900 bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-          <div className="mx-auto max-w-3xl">
-            <h1 className="text-3xl font-bold text-zinc-900">
-              Article not found
-            </h1>
-            <Button to="/articles">Back to Articles</Button>
-          </div>
-        </section>
-      </div>
+      <NotFoundPage />
     );
   }
 

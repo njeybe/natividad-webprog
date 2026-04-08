@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../components/Button";
 
 function NotFoundPage() {
   return (
@@ -9,6 +10,7 @@ function NotFoundPage() {
           <p className="text-zinc-600">
             Please make sure you clicked the right link!
           </p>
+          <Button to="/articles" className="mt-5">Back to articles</Button>
         </div>
       </div>
     </>
