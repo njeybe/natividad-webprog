@@ -10,11 +10,10 @@ const ArticlePage = () => {
           Articles
         </p>
         <h1 className="max-w-xl text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">
-          Featured articles in a simple card grid
+          Articles About nativdev
         </h1>
         <p className="mt-4 max-w-lg text-sm leading-7 text-zinc-600 sm:text-base">
-          A clean wireframe section for article thumbnails, titles, short
-          descriptions, and one clear action per card.
+          Monitor what nativdev do.
         </p>
         <div className="mt-6">
           <Button to="/">Back Home</Button>
@@ -27,7 +26,7 @@ const ArticlePage = () => {
             Featured Articles
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-zinc-900">
-            Article Card Grid
+            Activities
           </h2>
         </div>
         <ArticleList articles={articles} />
