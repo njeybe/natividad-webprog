@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/Layout";
-import ArticlePage from "./pages/ArticlePage";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
+import Layout from "./layouts/Layout";
+import ArticlePage from "./pages/LandingPages/ArticlePage";
+import HomePage from "./pages/LandingPages/HomePage";
+import AboutPage from "./pages/LandingPages/AboutPage";
+import ArticleListPage from "./pages/LandingPages/ArticleListPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import ArticleListPage from "./pages/ArticleListPage";
+import SignUpPage from "./pages/AuthPages/SignUpPage";
 
 const routes = [
   {
@@ -14,6 +15,10 @@ const routes = [
     children: [
       {
         path: "",
+        element: <SignUpPage />,
+      },
+      {
+        path: "home",
         element: <HomePage />,
       },
       {
