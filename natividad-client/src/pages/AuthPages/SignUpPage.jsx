@@ -75,7 +75,7 @@ const SignUpPage = () => {
               Password
             </label>
             <input
-              type="text"
+              type="password"
               id="signup-password"
               placeholder="Password"
               autoComplete="new-password"

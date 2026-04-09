@@ -3,9 +3,10 @@ import Layout from "./layouts/Layout";
 import ArticlePage from "./pages/LandingPages/ArticlePage";
 import HomePage from "./pages/LandingPages/HomePage";
 import AboutPage from "./pages/LandingPages/AboutPage";
-import ArticleListPage from "./pages/LandingPages/ArticleListPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ArticleListPage from "./pages/LandingPages/ArticleListPage";
 import SignUpPage from "./pages/AuthPages/SignUpPage";
+import SignInPage from "./pages/AuthPages/SignInPage";
 
 const routes = [
   {
@@ -15,6 +16,10 @@ const routes = [
     children: [
       {
         path: "",
+        element: <SignInPage />,
+      },
+      {
+        path: "signup",
         element: <SignUpPage />,
       },
       {
