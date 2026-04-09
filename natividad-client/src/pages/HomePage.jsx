@@ -15,7 +15,7 @@ const HomePage = () => {
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">Aspiring Backend Developer</p>
-            <h1 className="max-w-xl text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">Building the logic that powers the web.</h1>
+            <h1 className="max-w-xl uppercase text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">Building the logic that powers the web.</h1>
             <p className="mt-4 max-w-lg text-sm leading-7 text-zinc-600 sm:text-base">
               I'm Joseph Brian Natividad, a 3rd-year BSIT student at National University specializing in Mobile and Web Applications.
             </p>

@@ -38,7 +38,7 @@ const ArticlePage = () => {
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28] text-zinc-500">
           About me
         </p>
-        <h1 className="max-w-xl text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">
+        <h1 className="max-w-xl uppercase text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">
           Documenting my journey to the Backend.
         </h1>
         <p className="mt-4 max-w-lg text-sm leading-7 text-zinc-600 sm:text-base">

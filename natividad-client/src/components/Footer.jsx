@@ -15,19 +15,19 @@ const Footer = () => {
         <div className="flex gap-4">
           <a
             href="https://github.com/njeybe"
-            className="text-[10px] font-bold uppercase border-b-2 border-zinc-900"
+            className="text-[10px] font-bold uppercase border-b-2 border-zinc-900 no-underline"
           >
             GitHub
           </a>
           <a
             href="https://www.linkedin.com/in/njeybe/"
-            className="text-[10px] font-bold uppercase border-b-2 border-zinc-900"
+            className="text-[10px] font-bold uppercase border-b-2 border-zinc-900 no-underline"
           >
             LinkedIn
           </a>
           <a
             href="mailto:natividadjosephbrian@gmail.com"
-            className="text-[10px] font-bold uppercase border-b-2 border-zinc-900"
+            className="text-[10px] font-bold uppercase border-b-2 border-zinc-900 no-underline"
           >
             Gmail
           </a>
