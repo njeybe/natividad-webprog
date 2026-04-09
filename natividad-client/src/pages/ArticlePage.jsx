@@ -8,9 +8,7 @@ function ArticlePage() {
   const article = articles.find((article) => article.name === name);
 
   if (!article) {
-    return (
-      <NotFoundPage />
-    );
+    return <NotFoundPage />;
   }
 
   return (
@@ -38,7 +36,11 @@ function ArticlePage() {
       <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm-py-8 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] border-2 border-zinc-900 bg-zinc-200 mb-8">
-            <div className="h-24 w-24 border-2 border-zinc-300 bg-zinc100" />
+            <img
+              src={article.image}
+              alt={article.title}
+              className="h-full w-full object-cover rounded-2xl"
+            />
           </div>
 
           <div className="prose prose-sm max-w-none space-y-4 text-zinc-700">

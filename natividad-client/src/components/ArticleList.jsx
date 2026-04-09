@@ -10,7 +10,11 @@ const ArticleList = ({ articles }) => {
           className="rounded=3xl border-2 border-zinc-900 bg-zinc-100 p-4"
         >
           <div className="flex aspect-4/3 items-center justify-content rounded-[1.25rem] bg-zinc-200">
-            <div className="h-12 w-12 border-2 border-zinc-200 bg-zinc-100" />
+            <img
+              src={article.image}
+              alt={article.title}
+              className="h-full w-full object-cover rounded-2xl"
+            />
           </div>
           <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-500">
             Article {String(index + 1).padStart(2, "0")}
