@@ -5,7 +5,7 @@ const inputClasses =
   "mt-2 w-full rounded-xl border-zinc-300 bg-zinc-100 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-zinc-50";
 
 const actionButtonClassName =
-  "flex w-full rounded-xl py-3 text-[11px] tracking-[0.2em]";
+  "w-full rounded-xl py-3 text-[11px] tracking-[0.2em]";
 
 const SignInPage = () => {
   return (
