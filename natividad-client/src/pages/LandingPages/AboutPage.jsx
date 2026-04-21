@@ -92,7 +92,6 @@ const ArticlePage = () => {
               <p className="mt-3 text-sm leading-6 text-zinc-600 grow">
                 {article.description}
               </p>
-              {/* <Button className="mt-4">Read Notes</Button> */}
             </article>
           ))}
         </div>

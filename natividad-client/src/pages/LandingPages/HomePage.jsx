@@ -30,14 +30,12 @@ const HomePage = () => {
               </Button>
             </div>
           </div>
-          <div className="rounded-3xl border-2 border-dashed border-zinc-300 bg-zinc-100 p-4">
-            <div className="flex aspect-video w-full items-center justify-center overflow-hidden rounded-[1.25rem] bg-zinc-200 border-2 border-zinc-900">
-              <img
-                src={fullLogo}
-                alt="Backend Visual"
-                className="h-70 w-70 object-contain"
-              />
-            </div>
+          <div className="flex aspect-video w-full items-center justify-center overflow-hidden rounded-3xl border-2 border-zinc-900 bg-zinc-100">
+            <img
+              src={fullLogo}
+              alt="Backend Visual"
+              className="h-70 w-70 object-contain"
+            />
           </div>
         </div>
       </section>
@@ -65,25 +63,34 @@ const HomePage = () => {
           </h2>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
-          {["GitHub", "LinkedIn", "Gmail"].map((platform) => (
+          {[
+            { label: "GitHub", href: "https://github.com/njeybe", desc: "Browse my open-source work and public repositories." },
+            { label: "LinkedIn", href: "https://www.linkedin.com/in/njeybe/", desc: "Connect with me for collaborations and opportunities." },
+            { label: "Gmail", href: "mailto:natividadjosephbrian@gmail.com", desc: "Reach out directly for project inquiries." },
+          ].map((item) => (
             <article
-              key={platform}
+              key={item.label}
               className="rounded-3xl border-2 border-zinc-900 bg-zinc-100 p-4"
             >
               <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] bg-zinc-200">
                 <div className="h-12 w-12 border-2 border-zinc-900 bg-zinc-100 flex items-center justify-center font-bold text-xl">
-                  {platform[0]}
+                  {item.label[0]}
                 </div>
               </div>
               <h3 className="mt-4 text-lg font-semibold text-zinc-900">
-                {platform}
+                {item.label}
               </h3>
               <p className="mt-3 text-sm leading-6 text-zinc-600">
-                Connect with me for collaborations and project inquiries.
+                {item.desc}
               </p>
-              <Button className="mt-4" variant="primary">
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center justify-center rounded-full border-2 border-zinc-900 bg-zinc-900 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-50 transition hover:bg-zinc-700"
+              >
                 Visit
-              </Button>
+              </a>
             </article>
           ))}
         </div>

@@ -31,20 +31,20 @@ const routes = [
         path: "articles/:name",
         element: <ArticlePage />,
       },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    errorElement: <NotFoundPage />,
+    children: [
       {
-        path: "auth/",
-        element: <AuthLayout />,
-        errorElement: <NotFoundPage />,
-        children: [
-          {
-            path: "signin",
-            element: <SignInPage />,
-          },
-          {
-            path: "signup",
-            element: <SignUpPage />,
-          },
-        ],
+        path: "signin",
+        element: <SignInPage />,
+      },
+      {
+        path: "signup",
+        element: <SignUpPage />,
       },
     ],
   },

@@ -13,7 +13,7 @@ function ArticlePage() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm-py-8 lg:px-8">
+      <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="max-w-3xl">
           <div className="mb-4">
             <Button to="/articles">Back to Articles</Button>
@@ -33,7 +33,7 @@ function ArticlePage() {
         </div>
       </section>
 
-      <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm-py-8 lg:px-8">
+      <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] border-2 border-zinc-900 bg-zinc-200 mb-8">
             <img

@@ -13,7 +13,7 @@ const navLinkClassName = ({ isActive }) =>
     'rounded-full border-2 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition',
     isActive
       ? 'border-zinc-900 bg-zinc-900 text-zinc-50'
-      : 'border-transparent text-zinc-500 hover:border-zinc-900 hover:bg-zinc-50 hover:text-zinc-50',
+      : 'border-transparent text-zinc-500 hover:border-zinc-900 hover:bg-zinc-900 hover:text-zinc-50',
   ].join(' ');
 
 const NavBar = () => {
@@ -32,7 +32,7 @@ const NavBar = () => {
           ))}
         </nav>  
 
-        <Button to="/auth/signin" className='font-text'>Sign out</Button> 
+        <Button to="/auth/signin" variant="primary">Sign out</Button>
       </div>
     </header>
   );

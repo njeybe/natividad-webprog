@@ -7,9 +7,9 @@ const ArticleList = ({ articles }) => {
       {articles.map((article, index) => (
         <article
           key={article.name}
-          className="rounded=3xl border-2 border-zinc-900 bg-zinc-100 p-4"
+          className="rounded-3xl border-2 border-zinc-900 bg-zinc-100 p-4"
         >
-          <div className="flex aspect-4/3 items-center justify-content rounded-[1.25rem] bg-zinc-200">
+          <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] bg-zinc-200">
             <img
               src={article.image}
               alt={article.title}
