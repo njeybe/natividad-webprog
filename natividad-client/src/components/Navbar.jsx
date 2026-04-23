@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import logo from '../assets/images/Logo.png';
+import logo from '../assets/images/kraftine_logo.png';
 import Button from './Button';
 
 const links = [

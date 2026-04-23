@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import signinImage from "../assets/images/SignInImage.png";
-import signupImage from "../assets/images/SignUpImage.png";
+import signinImage from "../assets/images/kraftine_logo.png";
+import signupImage from "../assets/images/kraftine_logo.png";
 
 const AuthLayout = () => {
   const location = useLocation();

@@ -1,48 +1,48 @@
-import ts from "./images/typescript-logo.png";
-import todago from "./images/TodaGo-Logo.png";
-import rest from "./images/rest-api.jpg";
-import mapbox from "./images/mapbox-logo.png";
-import fcm from "./images/fcm.png";
+import bq1 from "./images/bq1.png";
+import bq2 from "./images/bq2.png";
+import bq3 from "./images/bq3.png";
+import bq4 from "./images/bq4.png";
+import bq5 from "./images/bq5.png";
 
 const articles = [
   {
-    name: "learning-typescript",
-    title: "Learning TypeScript for Better Safety.",
-    image: ts,
+    name: "romantic-rose-bouquet",
+    title: "Romantic Rose Bouquet",
+    image: bq1,
     content: [
-      "Practice using TypeScript to identify bugs while coding not when you run it.",
+      "A classic bouquet arrangement with rich rose tones, perfect for romantic occasions and heartfelt gifts.",
     ],
   },
   {
-    name: "pasabuy-feature",
-    title: "TodaGo's Pasabuy Feature",
-    image: todago,
+    name: "sunny-mixed-blooms",
+    title: "Sunny Mixed Blooms",
+    image: bq2,
     content: [
-      "Tricycle drivers can receive bookings not only for passenger but also for foods, things that user wants.",
+      "A bright and cheerful bouquet made with mixed flowers that adds warmth and positivity to any space.",
     ],
   },
   {
-    name: "connecting-frontend-and-backend",
-    title: "Connect Frontend & Backend for Testing.",
-    image: rest,
+    name: "pastel-garden-arrangement",
+    title: "Pastel Garden Arrangement",
+    image: bq3,
     content: [
-      "Connect the Flutter to our backend to test if there's an error or bugs.",
+      "Soft pastel blooms arranged in a garden-inspired style for elegant celebrations and special moments.",
     ],
   },
   {
-    name: "implement-map-api",
-    title: "Use Map API for User Interface",
-    image: mapbox,
+    name: "elegant-white-bouquet",
+    title: "Elegant White Bouquet",
+    image: bq4,
     content: [
-      "Using service that other ride hailing use so that user can track where is the driver.",
+      "A refined white-flower bouquet designed for timeless style, ideal for formal events and graceful gifting.",
     ],
   },
   {
-    name: "push-notification-service",
-    title: "Real-Time Updates for Both User.",
-    image: fcm,
+    name: "vibrant-celebration-bouquet",
+    title: "Vibrant Celebration Bouquet",
+    image: bq5,
     content: [
-      "Use Push Notification Service for convenient and live updates for driver and passengers.",
+      "A colorful celebration bouquet with energetic tones, made to stand out for birthdays and joyful milestones.",
     ],
   },
 ];

@@ -1,5 +1,5 @@
 import Button from "../../components/Button";
-import fullLogo from "../../assets/images/fullLogo.png";
+import fullLogo from "../../assets/images/kraftine_logo.png";
 
 const HomePage = () => {
   const stats = [
