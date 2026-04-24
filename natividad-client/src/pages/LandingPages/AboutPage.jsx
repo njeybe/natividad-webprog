@@ -1,4 +1,8 @@
 import Button from "../../components/Button";
+import daily from "../../assets/images/daily.png";
+import grab from "../../assets/images/grab.png";
+import event from "../../assets/images/event.png";
+import occasion from "../../assets/images/occasion.png";
 
 const aboutLogs = [
   {
@@ -6,28 +10,28 @@ const aboutLogs = [
     title: "Daily Fresh Flower Prep",
     description:
       "Our team starts early to sort, hydrate, and prep premium stems for same-day bouquet assembly.",
-    type: "code",
+    type: "daily",
   },
   {
     id: "02",
     title: "Bespoke Order Styling",
     description:
       "Each arrangement is customized by occasion, color preference, and card message.",
-    type: "icon",
+    type: "occasion",
   },
   {
     id: "03",
     title: "On-Time Delivery Workflow",
     description:
       "Order queue and dispatch coordination help keep gift moments on schedule.",
-    type: "status",
+    type: "deliver",
   },
   {
     id: "04",
     title: "Event Floral Setups",
     description:
       "We style intimate events with cohesive floral themes for table, stage, and entrance accents.",
-    type: "icon",
+    type: "event",
   },
 ];
 
@@ -69,22 +73,16 @@ const ArticlePage = () => {
               className="rounded-3xl border-2 border-(--color-border) bg-(--color-surface-alt) p-4 flex flex-col"
             >
               <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] bg-(--color-primary) p-4">
-                {article.type === "code" && (
-                  <span className="text-(--color-surface) font-mono text-[10px]">
-                    {"// fresh_stems.ready"}
-                  </span>
+                {article.type === "daily" && <img src={daily} alt="daily" className="h-90 w-100 object-cover rounded-3xl" />}
+                {article.type === "occasion" && (
+                  <img src={occasion} alt="occasion" className="h-90 w-100 object-cover rounded-3xl"/>
                 )}
-                {article.id === "02" && <span className="text-2xl">💐</span>}
-                {article.id === "03" && (
-                  <span className="text-(--color-surface) font-mono text-[10px]">
-                    {"{ status: 'success' }"}
-                  </span>
-                )}
-                {article.id === "04" && <span className="text-2xl">🌸</span>}
+                {article.type === "deliver" && <img src={grab} alt="deliver" className="h-90 w-100 object-cover rounded-3xl"/>}
+                {article.type === "event" && <img src={event} alt="event"  className="h-90 w-100 object-cover rounded-3xl" />}
               </div>
 
               <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-(--color-muted)">
-                Log {article.id}
+                {article.id}
               </p>
               <h3 className="mt-2 text-lg font-semibold text-(--color-text) leading-snug">
                 {article.title}

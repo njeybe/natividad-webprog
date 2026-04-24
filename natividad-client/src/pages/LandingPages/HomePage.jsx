@@ -31,11 +31,11 @@ const HomePage = () => {
               </Button>
             </div>
           </div>
-          <div className="flex aspect-video w-full items-center justify-center overflow-hidden rounded-3xl border-2 border-(--color-border) bg-(--color-surface-alt)">
+          <div className="flex aspect-video w-full items-center justify-center">
             <img
               src={fullLogo}
               alt="Kraftin'e floral visual"
-              className="h-70 w-70 object-contain"
+              className="h-150 w-165 object-cover rounded-full"
             />
           </div>
         </div>
