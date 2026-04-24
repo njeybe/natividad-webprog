@@ -6,36 +6,55 @@ import NotFoundPage from "../NotFoundPage.jsx";
 function ArticlePage() {
   const { name } = useParams();
   const article = articles.find((article) => article.name === name);
-  
+
   if (!article) {
     return <NotFoundPage />;
   }
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="border-y-2 border-(--color-border) bg-(--color-surface) px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="max-w-3xl">
           <div className="mb-4">
             <Button to="/articles">Back to Articles</Button>
           </div>
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
-            Article
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-(--color-muted)">
+            Product Detail
           </p>
-          <h1 className="text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl">
+          <h1 className="text-3xl font-bold leading-tight text-(--color-text) sm:text-4xl">
             {article.title}
           </h1>
-          <p className="mt-2 text-sm text-zinc-500">
+          <p className="mt-2 text-sm text-(--color-muted)">
             {article.name
               .split("-")
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
               .join(" ")}
           </p>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-(--color-border) bg-(--color-surface-alt) px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-(--color-primary)">
+              {article.category}
+            </span>
+            <span className="rounded-full border border-(--color-border) bg-(--color-surface-alt) px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-(--color-primary)">
+              Php {article.price.toLocaleString()}
+            </span>
+            <span
+              className={`rounded-full border border-(--color-border) px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
+                article.availability === "in-stock"
+                  ? "bg-(--color-surface-alt) text-(--color-success)"
+                  : article.availability === "limited"
+                    ? "bg-(--color-surface-alt) text-(--color-danger)"
+                    : "bg-(--color-surface-alt) text-(--color-muted)"
+              }`}
+            >
+              {article.availability.replace("-", " ")}
+            </span>
+          </div>
         </div>
       </section>
 
-      <section className="border-y-2 border-zinc-900 bg-amber-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <section className="border-y-2 border-(--color-border) bg-(--color-surface) px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] border-2 border-zinc-900 bg-zinc-200 mb-8">
+          <div className="mb-8 flex aspect-4/3 items-center justify-center rounded-[1.25rem] border-2 border-(--color-border) bg-(--color-surface-alt)">
             <img
               src={article.image}
               alt={article.title}
@@ -43,17 +62,17 @@ function ArticlePage() {
             />
           </div>
 
-          <div className="prose prose-sm max-w-none space-y-4 text-zinc-700">
+          <div className="prose prose-sm max-w-none space-y-4 text-(--color-text)">
             {article.content.map((paragraph, index) => (
               <p
                 key={index}
-                className="text-base leading-7 text-zinc-700 whitespace-pre-wrap"
+                className="whitespace-pre-wrap text-base leading-7 text-(--color-text)"
               >
                 {paragraph}
               </p>
             ))}
           </div>
-          <div className="mt-8 border-t-2 border-zinc-900 pt-6">
+          <div className="mt-8 border-t-2 border-(--color-border) pt-6">
             <Button to="/articles"> Back to Articles</Button>
           </div>
         </div>

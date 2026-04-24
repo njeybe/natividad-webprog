@@ -2,9 +2,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
 
+:root {
+  --color-bg: #fff6f2;
+  --color-surface: #fffdfa;
+  --color-surface-alt: #ffe8df;
+  --color-primary: #7a2f3b;
+  --color-primary-strong: #5f222d;
+  --color-primary-soft: #9b4f5d;
+  --color-text: #33171d;
+  --color-muted: #7f5f66;
+  --color-border: #7a2f3b;
+  --color-success: #3f7a55;
+  --color-danger: #a43f4d;
+}
+
 @layer base {
   body {
-    @apply bg-zinc-100 text-zinc-900 antialiased;
+    @apply antialiased;
+    background: var(--color-bg);
+    color: var(--color-text);
   }
 
   #root {

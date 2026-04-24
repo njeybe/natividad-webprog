@@ -7,42 +7,52 @@ import bq5 from "./images/bq5.png";
 const articles = [
   {
     name: "romantic-rose-bouquet",
-    title: "Romantic Rose Bouquet",
+    title: "Kraftin'e Romantic Rose",
     image: bq1,
+    availability: "in-stock",
+    price: 1499,
     content: [
-      "A classic bouquet arrangement with rich rose tones, perfect for romantic occasions and heartfelt gifts.",
+      "A signature rose bouquet with layered crimson and blush stems, handcrafted for anniversaries, dates, and heartfelt surprises.",
     ],
   },
   {
     name: "sunny-mixed-blooms",
-    title: "Sunny Mixed Blooms",
+    title: "Kraftin'e Sunny Mixed Blooms",
     image: bq2,
+    availability: "in-stock",
+    price: 1299,
     content: [
-      "A bright and cheerful bouquet made with mixed flowers that adds warmth and positivity to any space.",
+      "A cheerful mixed arrangement that brings warm color and joyful energy to birthdays, thank-you gifts, and house visits.",
     ],
   },
   {
     name: "pastel-garden-arrangement",
-    title: "Pastel Garden Arrangement",
+    title: "Kraftin'e Pastel Garden",
     image: bq3,
+    availability: "pre-order",
+    price: 1799,
     content: [
-      "Soft pastel blooms arranged in a garden-inspired style for elegant celebrations and special moments.",
+      "A soft garden-inspired arrangement in pastel tones, ideal for intimate weddings, engagement gifts, and elegant events.",
     ],
   },
   {
     name: "elegant-white-bouquet",
-    title: "Elegant White Bouquet",
+    title: "Kraftin'e Elegant White",
     image: bq4,
+    availability: "limited",
+    price: 1599,
     content: [
-      "A refined white-flower bouquet designed for timeless style, ideal for formal events and graceful gifting.",
+      "A timeless white bouquet with clean, refined lines made for respectful gestures, formal ceremonies, and graceful gifting.",
     ],
   },
   {
     name: "vibrant-celebration-bouquet",
-    title: "Vibrant Celebration Bouquet",
+    title: "Kraftin'e Celebration Burst",
     image: bq5,
+    availability: "in-stock",
+    price: 1399,
     content: [
-      "A colorful celebration bouquet with energetic tones, made to stand out for birthdays and joyful milestones.",
+      "A vibrant bouquet with energetic tones that stands out for milestone parties, congratulations, and grand reveals.",
     ],
   },
 ];

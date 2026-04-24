@@ -1,38 +1,49 @@
-import { NavLink } from 'react-router-dom';
-import logo from '../assets/images/kraftine_logo.png';
-import Button from './Button';
+import { NavLink } from "react-router-dom";
+import logo from "../assets/images/kraftine_logo.png";
+import Button from "./Button";
 
 const links = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
-  { label: 'Articles', to: '/articles' },
+  { label: "Home", to: "/" },
+  { label: "Our Story", to: "/about" },
+  { label: "Collection", to: "/articles" },
 ];
 
 const navLinkClassName = ({ isActive }) =>
   [
-    'rounded-full border-2 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition',
+    "rounded-full border-2 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition",
     isActive
-      ? 'border-zinc-900 bg-zinc-900 text-zinc-50'
-      : 'border-transparent text-zinc-500 hover:border-zinc-900 hover:bg-zinc-900 hover:text-zinc-50',
-  ].join(' ');
+      ? "border-[var(--color-border)] bg-[var(--color-primary)] text-[var(--color-surface)]"
+      : "border-transparent text-[var(--color-muted)] hover:border-[var(--color-border)] hover:bg-[var(--color-primary)] hover:text-[var(--color-surface)]",
+  ].join(" ");
 
 const NavBar = () => {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-zinc-200 bg-zinc-50 backdrop-blur">
+    <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-(--color-border) bg-(--color-surface) backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <NavLink to="/" className="flex items-center gap-3">
-          <img src={logo} alt="nativ dev" className="h-9 w-9 rounded-full border-2 border-zinc-50 bg-zinc-50 object-contain" />
+          <img
+            src={logo}
+            alt="Kraftin'e logo"
+            className="h-9 w-9 rounded-full border-2 border-(--color-border) bg-(--color-surface) object-contain"
+          />
         </NavLink>
 
         <nav className="hidden items-center gap-2 md:flex font-text">
           {links.map((link) => (
-            <NavLink key={link.to} to={link.to} end={link.to === '/'} className={navLinkClassName}>
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === "/"}
+              className={navLinkClassName}
+            >
               {link.label}
             </NavLink>
           ))}
-        </nav>  
+        </nav>
 
-        <Button to="/auth/signin" variant="primary">Sign out</Button>
+        <Button to="/auth/signin" variant="primary">
+          Customer Login
+        </Button>
       </div>
     </header>
   );
