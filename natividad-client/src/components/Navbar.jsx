@@ -41,9 +41,14 @@ const NavBar = () => {
           ))}
         </nav>
 
-        <Button to="/auth/signin" variant="primary">
-          Customer Login
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button to="/dashboard" variant="primary">
+            Dashboard
+          </Button>
+          <Button to="/auth/signin" variant="primary">
+            Sign out
+          </Button>
+        </div>
       </div>
     </header>
   );

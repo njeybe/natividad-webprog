@@ -11,7 +11,7 @@
   --color-primary-soft: #9b4f5d;
   --color-text: #33171d;
   --color-muted: #7f5f66;
-  --color-border: #7a2f3b;
+  --color-border: rgba(122, 47, 59, 0.18);
   --color-success: #3f7a55;
   --color-danger: #a43f4d;
 }
@@ -25,6 +25,14 @@
 
   #root {
     @apply min-h-screen;
+  }
+
+  a,
+  button,
+  input,
+  [role="button"] {
+    transition: color 0.18s ease, background-color 0.18s ease,
+      border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
   }
 }
 

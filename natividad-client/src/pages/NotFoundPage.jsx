@@ -17,7 +17,7 @@ const NotFoundPage = () => {
           </p>
           <div className="mt-6 flex justify-center gap-3 font-text">
             <Button to="/">Back Home</Button>
-            <Button to="/articles">View Articles</Button>
+            <Button to="/articles">View Collection</Button>
           </div>
         </div>
       </div>
