@@ -59,6 +59,7 @@ const labelize = (value) =>
 const UsersPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const [users, setUsers] = useState(initialUsers);
   const [modal, setModal] = useState({ open: false, id: null });
   const [form, setForm] = useState({ ...blankForm });
@@ -88,6 +89,12 @@ const UsersPage = () => {
       return matchSearch && matchRole && matchGender && matchStatus;
     });
   }, [users, search, filterRole, filterGender, filterStatus]);
+
+  const columnVisibilityModel = useMemo(() => {
+    if (isMobile) return { id: false, age: false, gender: false, contactNumber: false, email: false };
+    if (isTablet) return { age: false, gender: false, contactNumber: false };
+    return {};
+  }, [isMobile, isTablet]);
 
   const resetForm = () => {
     setForm({ ...blankForm });
@@ -339,7 +346,7 @@ const UsersPage = () => {
         sx={{
           p: { xs: 1.5, sm: 2 },
           minWidth: 0,
-          overflow: 'hidden',
+          overflow: 'auto',
           border: '1px solid',
           borderColor: 'divider',
           borderRadius: 3,
@@ -404,12 +411,14 @@ const UsersPage = () => {
           </TextField>
         </Stack>
 
-        <Box sx={{ height: 460, width: '100%', minWidth: 0 }}>
+        <Box sx={{ width: '100%', minWidth: 0 }}>
           <DataGrid
             rows={filteredUsers}
             columns={columns}
+            autoHeight
             disableRowSelectionOnClick
             checkboxSelection
+            columnVisibilityModel={columnVisibilityModel}
             pageSizeOptions={[5, 10]}
             initialState={{
               pagination: { paginationModel: { pageSize: 5, page: 0 } },

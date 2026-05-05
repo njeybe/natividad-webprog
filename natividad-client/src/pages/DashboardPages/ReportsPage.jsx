@@ -25,6 +25,7 @@ const chartCardSx = {
   border: '1px solid',
   borderColor: 'divider',
   elevation: 0,
+  overflow: 'hidden',
   transition: 'box-shadow 0.2s ease',
   '&:hover': { boxShadow: '0 4px 16px rgba(122,47,59,0.08)' },
 };
@@ -116,7 +117,7 @@ const ReportsPage = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ width: '100%', overflowX: 'hidden' }}>
       <Stack
         direction={{ xs: 'column', md: 'row' }}
         justifyContent="space-between"
@@ -144,86 +145,98 @@ const ReportsPage = () => {
       <Stack ref={printRef} spacing={3}>
         <Grid container spacing={2}>
           {/* Monthly Sales Bar Chart */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ minWidth: 0 }}>
             <Paper elevation={0} sx={chartCardSx}>
               <Typography variant="subtitle1" fontWeight={600} mb={2}>
                 Monthly Sales
               </Typography>
-              <BarChart
-                xAxis={[{ scaleType: 'band', data: months }]}
-                series={[{ data: salesData, label: 'Sales', color: '#7a2f3b' }]}
-                height={260}
-              />
+              <Box sx={{ width: '100%' }}>
+                <BarChart
+                  xAxis={[{ scaleType: 'band', data: months }]}
+                  series={[{ data: salesData, label: 'Sales', color: '#7a2f3b' }]}
+                  height={260}
+                  sx={{ width: '100%' }}
+                />
+              </Box>
             </Paper>
           </Grid>
 
           {/* Order Volume Line Chart */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ minWidth: 0 }}>
             <Paper elevation={0} sx={chartCardSx}>
               <Typography variant="subtitle1" fontWeight={600} mb={2}>
                 Order Volume
               </Typography>
-              <LineChart
-                xAxis={[{ scaleType: 'point', data: months }]}
-                series={[
-                  {
-                    data: ordersData,
-                    label: 'Orders',
-                    color: '#9b4f5d',
-                    area: true,
-                    showMark: true,
-                  },
-                ]}
-                height={260}
-                sx={{
-                  '& .MuiAreaElement-root': {
-                    fill: 'url(#areaGradient)',
-                    opacity: 0.15,
-                  },
-                }}
-              />
+              <Box sx={{ width: '100%' }}>
+                <LineChart
+                  xAxis={[{ scaleType: 'point', data: months }]}
+                  series={[
+                    {
+                      data: ordersData,
+                      label: 'Orders',
+                      color: '#9b4f5d',
+                      area: true,
+                      showMark: true,
+                    },
+                  ]}
+                  height={260}
+                  sx={{
+                    width: '100%',
+                    '& .MuiAreaElement-root': {
+                      fill: 'url(#areaGradient)',
+                      opacity: 0.15,
+                    },
+                  }}
+                />
+              </Box>
             </Paper>
           </Grid>
 
           {/* Order Channel Pie Chart */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ minWidth: 0 }}>
             <Paper elevation={0} sx={chartCardSx}>
               <Typography variant="subtitle1" fontWeight={600} mb={2}>
                 Order Channels
               </Typography>
-              <PieChart
-                series={[
-                  {
-                    data: channelData,
-                    innerRadius: 50,
-                    outerRadius: 110,
-                    paddingAngle: 2,
-                    cornerRadius: 4,
-                  },
-                ]}
-                height={260}
-                colors={['#7a2f3b', '#9b4f5d', '#b87080']}
-              />
+              <Box sx={{ width: '100%' }}>
+                <PieChart
+                  series={[
+                    {
+                      data: channelData,
+                      innerRadius: 50,
+                      outerRadius: 110,
+                      paddingAngle: 2,
+                      cornerRadius: 4,
+                    },
+                  ]}
+                  height={260}
+                  sx={{ width: '100%' }}
+                  colors={['#7a2f3b', '#9b4f5d', '#b87080']}
+                />
+              </Box>
             </Paper>
           </Grid>
 
           {/* Quarterly Breakdown Bar Chart */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ minWidth: 0 }}>
             <Paper elevation={0} sx={chartCardSx}>
               <Typography variant="subtitle1" fontWeight={600} mb={2}>
                 Quarterly Breakdown
               </Typography>
-              <BarChart
-                xAxis={[{ scaleType: 'band', data: ['Q1', 'Q2', 'Q3', 'Q4'] }]}
-                series={[
-                  {
-                    data: quarterlyData.map((d) => d.value),
-                    label: 'Revenue',
-                    color: '#5f222d',
-                  },
-                ]}
-                height={260}
-              />
+              <Box sx={{ width: '100%' }}>
+                <BarChart
+                  xAxis={[{ scaleType: 'band', data: ['Q1', 'Q2', 'Q3', 'Q4'] }]}
+                  series={[
+                    {
+                      data: quarterlyData.map((d) => d.value),
+                      label: 'Revenue',
+                      color: '#5f222d',
+                    },
+                  ]}
+                  height={260}
+                  sx={{ width: '100%' }}
+                />
+              </Box>
             </Paper>
           </Grid>
         </Grid>
