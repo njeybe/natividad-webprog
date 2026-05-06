@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 import {
   Alert,
   Box,
@@ -18,43 +18,59 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { DataGrid } from '@mui/x-data-grid';
-import usersSeed from '../../assets/users.json?raw';
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { DataGrid } from "@mui/x-data-grid";
+import usersSeed from "../../assets/users.json?raw";
 
-const roles = ['admin', 'editor', 'viewer'];
-const genders = ['male', 'female', 'other'];
+const roles = ["admin", "editor", "viewer"];
+const genders = ["male", "female", "other"];
 
 const loadUsers = () => {
   try {
     return {
       users: JSON.parse(usersSeed).map((user, index) => ({
         id: Number(user.id) || index + 1,
-        firstName: String(user.firstName ?? '').trim(),
-        lastName: String(user.lastName ?? '').trim(),
-        age: String(user.age ?? '').trim(),
-        gender: genders.includes(String(user.gender ?? '').trim().toLowerCase())
-          ? String(user.gender ?? '').trim().toLowerCase()
-          : '',
-        contactNumber: String(user.contactNumber ?? '').trim(),
-        email: String(user.email ?? '').trim().toLowerCase(),
-        role: roles.includes(String(user.role ?? '').trim().toLowerCase())
-          ? String(user.role ?? '').trim().toLowerCase()
-          : 'editor',
-        username: String(user.username ?? '').trim().toLowerCase(),
-        password: String(user.password ?? ''),
-        address: String(user.address ?? '').trim(),
-        isActive: typeof user.isActive === 'boolean' ? user.isActive : true,
+        firstName: String(user.firstName ?? "").trim(),
+        lastName: String(user.lastName ?? "").trim(),
+        age: String(user.age ?? "").trim(),
+        gender: genders.includes(
+          String(user.gender ?? "")
+            .trim()
+            .toLowerCase(),
+        )
+          ? String(user.gender ?? "")
+              .trim()
+              .toLowerCase()
+          : "",
+        contactNumber: String(user.contactNumber ?? "").trim(),
+        email: String(user.email ?? "")
+          .trim()
+          .toLowerCase(),
+        role: roles.includes(
+          String(user.role ?? "")
+            .trim()
+            .toLowerCase(),
+        )
+          ? String(user.role ?? "")
+              .trim()
+              .toLowerCase()
+          : "editor",
+        username: String(user.username ?? "")
+          .trim()
+          .toLowerCase(),
+        password: String(user.password ?? ""),
+        address: String(user.address ?? "").trim(),
+        isActive: typeof user.isActive === "boolean" ? user.isActive : true,
       })),
-      error: '',
+      error: "",
     };
   } catch {
     return {
       users: [],
-      error: 'Unable to read users from src/assets/users.json.',
+      error: "Unable to read users from src/assets/users.json.",
     };
   }
 };
@@ -62,25 +78,25 @@ const loadUsers = () => {
 const seed = loadUsers();
 
 const blankForm = {
-  firstName: '',
-  lastName: '',
-  age: '',
-  gender: '',
-  contactNumber: '',
-  email: '',
-  role: 'editor',
-  username: '',
-  password: '',
-  address: '',
+  firstName: "",
+  lastName: "",
+  age: "",
+  gender: "",
+  contactNumber: "",
+  email: "",
+  role: "editor",
+  username: "",
+  password: "",
+  address: "",
   isActive: true,
 };
 
 const labelize = (value) =>
-  value ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : '';
+  value ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : "";
 
 const UsersPage = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [users, setUsers] = useState(seed.users);
   const [modal, setModal] = useState({ open: false, id: null });
   const [form, setForm] = useState({ ...blankForm });
@@ -88,10 +104,10 @@ const UsersPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // Enhancement 2 — search & filter state
-  const [search, setSearch] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [filterGender, setFilterGender] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [search, setSearch] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const [filterGender, setFilterGender] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   const filteredUsers = useMemo(() => {
     const q = search.toLowerCase();
@@ -102,11 +118,11 @@ const UsersPage = () => {
         u.lastName.toLowerCase().includes(q) ||
         u.email.toLowerCase().includes(q) ||
         u.username.toLowerCase().includes(q);
-      const matchRole = filterRole === 'all' || u.role === filterRole;
-      const matchGender = filterGender === 'all' || u.gender === filterGender;
+      const matchRole = filterRole === "all" || u.role === filterRole;
+      const matchGender = filterGender === "all" || u.gender === filterGender;
       const matchStatus =
-        filterStatus === 'all' ||
-        (filterStatus === 'active' ? u.isActive : !u.isActive);
+        filterStatus === "all" ||
+        (filterStatus === "active" ? u.isActive : !u.isActive);
       return matchSearch && matchRole && matchGender && matchStatus;
     });
   }, [users, search, filterRole, filterGender, filterStatus]);
@@ -131,10 +147,10 @@ const UsersPage = () => {
   const handleChange = ({ target: { name, value, checked, type } }) => {
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -144,55 +160,55 @@ const UsersPage = () => {
     const username = form.username.trim().toLowerCase();
 
     [
-      ['firstName', 'First name'],
-      ['lastName', 'Last name'],
-      ['age', 'Age'],
-      ['gender', 'Gender'],
-      ['contactNumber', 'Contact number'],
-      ['email', 'Email'],
-      ['role', 'Role'],
-      ['username', 'Username'],
-      ['password', 'Password'],
-      ['address', 'Address'],
+      ["firstName", "First name"],
+      ["lastName", "Last name"],
+      ["age", "Age"],
+      ["gender", "Gender"],
+      ["contactNumber", "Contact number"],
+      ["email", "Email"],
+      ["role", "Role"],
+      ["username", "Username"],
+      ["password", "Password"],
+      ["address", "Address"],
     ].forEach(([key, label]) => {
-      if (!form[key] && key !== 'isActive') {
+      if (!form[key] && key !== "isActive") {
         nextErrors[key] = `${label} is required`;
       }
     });
 
     if (!nextErrors.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mustEmail)) {
-      nextErrors.email = 'Enter a valid email address';
+      nextErrors.email = "Enter a valid email address";
     }
 
     if (
       !nextErrors.email &&
       users.some((u) => u.id !== modal.id && u.email === mustEmail)
     ) {
-      nextErrors.email = 'Email address already exists.';
+      nextErrors.email = "Email address already exists.";
     }
 
     if (
       !nextErrors.username &&
       users.some((u) => u.id !== modal.id && u.username === username)
     ) {
-      nextErrors.username = 'Username already exists.';
+      nextErrors.username = "Username already exists.";
     }
 
     // Enhancement 3 — beginner-friendly validation rules
     if (!nextErrors.password && form.password.length < 8) {
-      nextErrors.password = 'Password must be at least 8 characters';
+      nextErrors.password = "Password must be at least 8 characters";
     }
 
     if (!nextErrors.contactNumber && !/^\d{11}$/.test(form.contactNumber)) {
-      nextErrors.contactNumber = 'Contact number must be exactly 11 digits';
+      nextErrors.contactNumber = "Contact number must be exactly 11 digits";
     }
 
     if (!nextErrors.age && !/^\d+$/.test(form.age.trim())) {
-      nextErrors.age = 'Age must be a number only';
+      nextErrors.age = "Age must be a number only";
     }
 
     if (!nextErrors.username && /\s/.test(form.username)) {
-      nextErrors.username = 'Username must not contain spaces';
+      nextErrors.username = "Username must not contain spaces";
     }
 
     return nextErrors;
@@ -224,7 +240,7 @@ const UsersPage = () => {
     setUsers((prev) =>
       modal.id
         ? prev.map((user) =>
-            user.id === modal.id ? { ...user, ...nextUser } : user
+            user.id === modal.id ? { ...user, ...nextUser } : user,
           )
         : [
             ...prev,
@@ -232,11 +248,11 @@ const UsersPage = () => {
               id:
                 prev.reduce(
                   (max, user) => Math.max(max, Number(user.id) || 0),
-                  0
+                  0,
                 ) + 1,
               ...nextUser,
             },
-          ]
+          ],
     );
 
     closeModal();
@@ -245,8 +261,8 @@ const UsersPage = () => {
   const toggleStatus = (id) => {
     setUsers((prev) =>
       prev.map((user) =>
-        user.id === id ? { ...user, isActive: !user.isActive } : user
-      )
+        user.id === id ? { ...user, isActive: !user.isActive } : user,
+      ),
     );
   };
 
@@ -262,46 +278,46 @@ const UsersPage = () => {
   });
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 50 },
+    { field: "id", headerName: "ID", width: 50 },
     {
-      field: 'firstName',
-      headerName: 'Full Name',
+      field: "firstName",
+      headerName: "Full Name",
       width: 140,
       valueGetter: (value, row) => `${row.firstName} ${row.lastName}`.trim(),
     },
-    { field: 'username', headerName: 'Username', width: 130 },
-    { field: 'age', headerName: 'Age', width: 50 },
+    { field: "username", headerName: "Username", width: 130 },
+    { field: "age", headerName: "Age", width: 50 },
     {
-      field: 'gender',
-      headerName: 'Gender',
+      field: "gender",
+      headerName: "Gender",
       width: 75,
       valueGetter: (value, row) => labelize(row.gender),
     },
-    { field: 'contactNumber', headerName: 'Phone', width: 120 },
-    { field: 'email', headerName: 'Email', width: 180 },
+    { field: "contactNumber", headerName: "Phone", width: 120 },
+    { field: "email", headerName: "Email", width: 180 },
     {
-      field: 'role',
-      headerName: 'Role',
+      field: "role",
+      headerName: "Role",
       width: 70,
       valueGetter: (value, row) => labelize(row.role),
     },
     {
-      field: 'isActive',
-      headerName: 'Status',
+      field: "isActive",
+      headerName: "Status",
       width: 85,
       sortable: false,
       renderCell: (cell) => (
         <Chip
           size="small"
           variant="outlined"
-          color={cell.row.isActive ? 'success' : 'warning'}
-          label={cell.row.isActive ? 'Active' : 'Inactive'}
+          color={cell.row.isActive ? "success" : "warning"}
+          label={cell.row.isActive ? "Active" : "Inactive"}
         />
       ),
     },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      headerName: "Actions",
       width: 145,
       sortable: false,
       filterable: false,
@@ -323,10 +339,10 @@ const UsersPage = () => {
           <Button
             size="small"
             variant="contained"
-            color={cell.row.isActive ? 'warning' : 'success'}
+            color={cell.row.isActive ? "warning" : "success"}
             onClick={() => toggleStatus(cell.row.id)}
           >
-            {cell.row.isActive ? 'Disable' : 'Activate'}
+            {cell.row.isActive ? "Disable" : "Activate"}
           </Button>
         </Stack>
       ),
@@ -334,23 +350,20 @@ const UsersPage = () => {
   ];
 
   return (
-    <Box sx={{ width: '100%', minWidth: 0, overflowX: 'hidden' }}>
+    <Box sx={{ width: "100%", minWidth: 0, overflowX: "hidden" }}>
       {/* Header */}
       <Box
         sx={{
           mb: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           gap: 2,
-          flexWrap: 'wrap',
+          flexWrap: "wrap",
         }}
       >
         <Typography variant="h4">Users</Typography>
-        <Button
-          variant="contained"
-          onClick={() => openModal()}
-        >
+        <Button variant="contained" onClick={() => openModal()}>
           Add User
         </Button>
       </Box>
@@ -366,15 +379,15 @@ const UsersPage = () => {
         sx={{
           p: { xs: 1.5, sm: 2 },
           minWidth: 0,
-          overflow: 'hidden',
-          border: '1px solid',
-          borderColor: 'divider',
+          overflow: "hidden",
+          border: "1px solid",
+          borderColor: "divider",
           borderRadius: 3,
         }}
       >
         {/* Enhancement 2 — Search & Filter Row */}
         <Stack
-          direction={{ xs: 'column', sm: 'row' }}
+          direction={{ xs: "column", sm: "row" }}
           spacing={2}
           sx={{ mb: 2 }}
           flexWrap="wrap"
@@ -431,31 +444,30 @@ const UsersPage = () => {
           </TextField>
         </Stack>
 
-        <Box sx={{ width: '100%', minWidth: 0 }}>
+        <Box sx={{ width: "100%", minWidth: 0 }}>
           <DataGrid
             rows={filteredUsers}
             columns={columns}
             autoHeight
             disableRowSelectionOnClick
-            checkboxSelection
             pageSizeOptions={[5, 10]}
             initialState={{
               pagination: { paginationModel: { pageSize: 5, page: 0 } },
             }}
             sx={{
-              border: 'none',
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'rgba(122,47,59,0.05)',
+              border: "none",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "rgba(122,47,59,0.05)",
               },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: 'rgba(122,47,59,0.03)',
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "rgba(122,47,59,0.03)",
               },
-              '& .MuiDataGrid-row.Mui-selected': {
-                backgroundColor: 'rgba(122,47,59,0.08)',
-                '&:hover': { backgroundColor: 'rgba(122,47,59,0.10)' },
+              "& .MuiDataGrid-row.Mui-selected": {
+                backgroundColor: "rgba(122,47,59,0.08)",
+                "&:hover": { backgroundColor: "rgba(122,47,59,0.10)" },
               },
-              '& .MuiDataGrid-cell:focus': { outline: 'none' },
-              '& .MuiCheckbox-root.Mui-checked': { color: 'primary.main' },
+              "& .MuiDataGrid-cell:focus": { outline: "none" },
+              "& .MuiCheckbox-root.Mui-checked": { color: "primary.main" },
             }}
           />
         </Box>
@@ -470,17 +482,17 @@ const UsersPage = () => {
         maxWidth="md"
       >
         <Box component="form" onSubmit={handleSubmit}>
-          <DialogTitle>{modal.id ? 'Edit User' : 'Add User'}</DialogTitle>
+          <DialogTitle>{modal.id ? "Edit User" : "Add User"}</DialogTitle>
           <DialogContent dividers sx={{ pt: 2 }}>
             <Stack spacing={2} sx={{ pt: 1 }}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField {...fieldProps('firstName', 'First Name')} />
-                <TextField {...fieldProps('lastName', 'Last Name')} />
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <TextField {...fieldProps("firstName", "First Name")} />
+                <TextField {...fieldProps("lastName", "Last Name")} />
               </Stack>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField {...fieldProps('age', 'Age')} />
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <TextField {...fieldProps("age", "Age")} />
                 <TextField
-                  {...fieldProps('gender', 'Gender', { select: true })}
+                  {...fieldProps("gender", "Gender", { select: true })}
                 >
                   {genders.map((gender) => (
                     <MenuItem key={gender} value={gender}>
@@ -489,25 +501,25 @@ const UsersPage = () => {
                   ))}
                 </TextField>
               </Stack>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField {...fieldProps('contactNumber', 'Contact Number')} />
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <TextField {...fieldProps("contactNumber", "Contact Number")} />
                 <TextField
-                  {...fieldProps('email', 'Email Address', { type: 'email' })}
+                  {...fieldProps("email", "Email Address", { type: "email" })}
                 />
               </Stack>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField {...fieldProps('role', 'Role', { select: true })}>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <TextField {...fieldProps("role", "Role", { select: true })}>
                   {roles.map((role) => (
                     <MenuItem key={role} value={role}>
                       {labelize(role)}
                     </MenuItem>
                   ))}
                 </TextField>
-                <TextField {...fieldProps('username', 'Username')} />
+                <TextField {...fieldProps("username", "Username")} />
               </Stack>
               <TextField
-                {...fieldProps('password', 'Password', {
-                  type: showPassword ? 'text' : 'password',
+                {...fieldProps("password", "Password", {
+                  type: showPassword ? "text" : "password",
                   slotProps: {
                     input: {
                       endAdornment: (
@@ -517,7 +529,7 @@ const UsersPage = () => {
                             onClick={() => setShowPassword((prev) => !prev)}
                             onMouseDown={(event) => event.preventDefault()}
                             aria-label={
-                              showPassword ? 'Hide password' : 'Show password'
+                              showPassword ? "Hide password" : "Show password"
                             }
                           >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -529,7 +541,7 @@ const UsersPage = () => {
                 })}
               />
               <TextField
-                {...fieldProps('address', 'Address', {
+                {...fieldProps("address", "Address", {
                   multiline: true,
                   rows: 3,
                 })}
@@ -544,8 +556,8 @@ const UsersPage = () => {
                 }
                 label={
                   form.isActive
-                    ? 'User status: Active'
-                    : 'User status: Inactive'
+                    ? "User status: Active"
+                    : "User status: Inactive"
                 }
               />
             </Stack>
@@ -553,7 +565,7 @@ const UsersPage = () => {
           <DialogActions sx={{ py: 2 }}>
             <Button onClick={closeModal}>Cancel</Button>
             <Button type="submit" variant="contained">
-              {modal.id ? 'Update User' : 'Save User'}
+              {modal.id ? "Update User" : "Save User"}
             </Button>
           </DialogActions>
         </Box>
