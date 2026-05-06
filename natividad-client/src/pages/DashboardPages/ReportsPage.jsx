@@ -33,13 +33,13 @@ const chartCardSx = {
 const ReportsPage = () => {
   const printRef = useRef(null);
 
-  const handleGenerate = () => {
-    console.log('Generate clicked');
-  };
+  // const handleGenerate = () => {
+  //   console.log('Generate clicked');
+  // };
 
-  const handleFilter = () => {
-    console.log('Filter clicked');
-  };
+  // const handleFilter = () => {
+  //   console.log('Filter clicked');
+  // };
 
   const handlePrint = () => {
     const printContent = printRef.current;
@@ -134,11 +134,11 @@ const ReportsPage = () => {
           </Typography>
         </Box>
         <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
-          <Button variant="outlined" onClick={handleGenerate}>Generate</Button>
+          {/* <Button variant="outlined" onClick={handleGenerate}>Generate</Button> */}
           <Button variant="outlined" onClick={handlePrint}>
             Export
           </Button>
-          <Button variant="outlined" onClick={handleFilter}>Filter</Button>
+          {/* <Button variant="outlined" onClick={handleFilter}>Filter</Button> */}
         </Stack>
       </Stack>
 
