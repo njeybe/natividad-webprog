@@ -23,21 +23,43 @@ import { useTheme } from '@mui/material/styles';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { DataGrid } from '@mui/x-data-grid';
+import usersSeed from '../../assets/users.json?raw';
 
 const roles = ['admin', 'editor', 'viewer'];
 const genders = ['male', 'female', 'other'];
 
-const initialUsers = [
-  { id: 1, firstName: 'JB',       lastName: 'Nativdad', age: '20', gender: 'male', contactNumber: '09171234561', email: 'jb.nativdad@webprog.dev',       role: 'admin',  username: 'jbnativdad',      password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 2, firstName: 'Mac',      lastName: 'Iguiron',  age: '20', gender: 'male', contactNumber: '09171234562', email: 'mac.iguiron@webprog.dev',       role: 'editor', username: 'maciguiron',      password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 3, firstName: 'Shem',     lastName: 'Naranjo',  age: '21', gender: 'male', contactNumber: '09171234563', email: 'shem.naranjo@webprog.dev',      role: 'viewer', username: 'shemnaranjo',     password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 4, firstName: 'Vergel',   lastName: 'Santiago', age: '20', gender: 'male', contactNumber: '09171234564', email: 'vergel.santiago@webprog.dev',   role: 'viewer', username: 'vergelsantiago',  password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 5, firstName: 'Marius',   lastName: 'Panahon',  age: '20', gender: 'male', contactNumber: '09171234565', email: 'marius.panahon@webprog.dev',    role: 'editor', username: 'mariuspanahon',   password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 6, firstName: '',         lastName: 'Regodon',  age: '20', gender: 'male', contactNumber: '09171234566', email: 'regodon@webprog.dev',           role: 'viewer', username: 'regodon',         password: 'Password1!', address: 'Manila, Metro Manila', isActive: false },
-  { id: 7, firstName: 'Rhoedney', lastName: 'Reillo',   age: '24', gender: 'male', contactNumber: '09171234567', email: 'rhoedney.reillo@webprog.dev',   role: 'viewer', username: 'rhoedneyreillo',  password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 8, firstName: 'Joshua',   lastName: 'Braza',    age: '36', gender: 'male', contactNumber: '09171234568', email: 'joshua.braza@webprog.dev',      role: 'editor', username: 'joshuabraza',     password: 'Password1!', address: 'Manila, Metro Manila', isActive: true  },
-  { id: 9, firstName: 'Jed',      lastName: 'Ramos',    age: '65', gender: 'male', contactNumber: '09171234569', email: 'jed.ramos@webprog.dev',         role: 'admin',  username: 'jedramos',        password: 'Password1!', address: 'Manila, Metro Manila', isActive: false },
-];
+const loadUsers = () => {
+  try {
+    return {
+      users: JSON.parse(usersSeed).map((user, index) => ({
+        id: Number(user.id) || index + 1,
+        firstName: String(user.firstName ?? '').trim(),
+        lastName: String(user.lastName ?? '').trim(),
+        age: String(user.age ?? '').trim(),
+        gender: genders.includes(String(user.gender ?? '').trim().toLowerCase())
+          ? String(user.gender ?? '').trim().toLowerCase()
+          : '',
+        contactNumber: String(user.contactNumber ?? '').trim(),
+        email: String(user.email ?? '').trim().toLowerCase(),
+        role: roles.includes(String(user.role ?? '').trim().toLowerCase())
+          ? String(user.role ?? '').trim().toLowerCase()
+          : 'editor',
+        username: String(user.username ?? '').trim().toLowerCase(),
+        password: String(user.password ?? ''),
+        address: String(user.address ?? '').trim(),
+        isActive: typeof user.isActive === 'boolean' ? user.isActive : true,
+      })),
+      error: '',
+    };
+  } catch {
+    return {
+      users: [],
+      error: 'Unable to read users from src/assets/users.json.',
+    };
+  }
+};
+
+const seed = loadUsers();
 
 const blankForm = {
   firstName: '',
@@ -59,8 +81,7 @@ const labelize = (value) =>
 const UsersPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState(seed.users);
   const [modal, setModal] = useState({ open: false, id: null });
   const [form, setForm] = useState({ ...blankForm });
   const [errors, setErrors] = useState({});
@@ -89,12 +110,6 @@ const UsersPage = () => {
       return matchSearch && matchRole && matchGender && matchStatus;
     });
   }, [users, search, filterRole, filterGender, filterStatus]);
-
-  const columnVisibilityModel = useMemo(() => {
-    if (isMobile) return { id: false, age: false, gender: false, contactNumber: false, email: false };
-    if (isTablet) return { age: false, gender: false, contactNumber: false };
-    return {};
-  }, [isMobile, isTablet]);
 
   const resetForm = () => {
     setForm({ ...blankForm });
@@ -247,33 +262,33 @@ const UsersPage = () => {
   });
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'id', headerName: 'ID', width: 50 },
     {
       field: 'firstName',
       headerName: 'Full Name',
-      minWidth: 170,
+      width: 140,
       valueGetter: (value, row) => `${row.firstName} ${row.lastName}`.trim(),
     },
-    { field: 'username', headerName: 'Username', minWidth: 130 },
-    { field: 'age', headerName: 'Age', width: 80 },
+    { field: 'username', headerName: 'Username', width: 130 },
+    { field: 'age', headerName: 'Age', width: 50 },
     {
       field: 'gender',
       headerName: 'Gender',
-      minWidth: 110,
+      width: 75,
       valueGetter: (value, row) => labelize(row.gender),
     },
-    { field: 'contactNumber', headerName: 'Contact Number', minWidth: 150 },
-    { field: 'email', headerName: 'Email', flex: 1, minWidth: 150 },
+    { field: 'contactNumber', headerName: 'Phone', width: 120 },
+    { field: 'email', headerName: 'Email', width: 180 },
     {
       field: 'role',
       headerName: 'Role',
-      minWidth: 110,
+      width: 70,
       valueGetter: (value, row) => labelize(row.role),
     },
     {
       field: 'isActive',
       headerName: 'Status',
-      minWidth: 120,
+      width: 85,
       sortable: false,
       renderCell: (cell) => (
         <Chip
@@ -287,7 +302,7 @@ const UsersPage = () => {
     {
       field: 'actions',
       headerName: 'Actions',
-      minWidth: 210,
+      width: 145,
       sortable: false,
       filterable: false,
       renderCell: (cell) => (
@@ -319,7 +334,7 @@ const UsersPage = () => {
   ];
 
   return (
-    <Box sx={{ width: '100%', minWidth: 0 }}>
+    <Box sx={{ width: '100%', minWidth: 0, overflowX: 'hidden' }}>
       {/* Header */}
       <Box
         sx={{
@@ -335,18 +350,23 @@ const UsersPage = () => {
         <Button
           variant="contained"
           onClick={() => openModal()}
-          sx={{ width: { xs: '100%', sm: 'auto' } }}
         >
           Add User
         </Button>
       </Box>
+
+      {seed.error ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {seed.error}
+        </Alert>
+      ) : null}
 
       <Paper
         elevation={0}
         sx={{
           p: { xs: 1.5, sm: 2 },
           minWidth: 0,
-          overflow: 'auto',
+          overflow: 'hidden',
           border: '1px solid',
           borderColor: 'divider',
           borderRadius: 3,
@@ -418,7 +438,6 @@ const UsersPage = () => {
             autoHeight
             disableRowSelectionOnClick
             checkboxSelection
-            columnVisibilityModel={columnVisibilityModel}
             pageSizeOptions={[5, 10]}
             initialState={{
               pagination: { paginationModel: { pageSize: 5, page: 0 } },
