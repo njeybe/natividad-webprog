@@ -4,6 +4,8 @@ import PeopleIcon from "@mui/icons-material/People";
 import PersonIcon from "@mui/icons-material/Person";
 import { BarChart, PieChart } from "@mui/x-charts";
 import { DataGrid } from "@mui/x-data-grid";
+import "leaflet/dist/leaflet.css";
+import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
 
 const rows = [
   { id: 1, lastName: "Nativdad", firstName: "JB", age: null },
@@ -40,9 +42,7 @@ const statCards = [
   {
     label: "Average Age",
     value: (
-      rows
-        .filter((r) => r.age != null)
-        .reduce((sum, r) => sum + r.age, 0) /
+      rows.filter((r) => r.age != null).reduce((sum, r) => sum + r.age, 0) /
       rows.filter((r) => r.age != null).length
     ).toFixed(1),
     icon: PersonIcon,
@@ -56,10 +56,17 @@ const pieData = [
   { id: 3, value: 20, label: "Custom" },
 ];
 
+const mapCenter = [14.5995, 120.9842];
+
 function DashboardPage() {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <Typography variant="h5" fontWeight={700} color="text.primary" gutterBottom>
+      <Typography
+        variant="h5"
+        fontWeight={700}
+        color="text.primary"
+        gutterBottom
+      >
         Dashboard
       </Typography>
 
@@ -96,7 +103,12 @@ function DashboardPage() {
                 <Icon fontSize="medium" />
               </Box>
               <Box>
-                <Typography variant="h4" fontWeight={700} color="text.primary" lineHeight={1}>
+                <Typography
+                  variant="h4"
+                  fontWeight={700}
+                  color="text.primary"
+                  lineHeight={1}
+                >
                   {value}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" mt={0.5}>
@@ -185,7 +197,6 @@ function DashboardPage() {
           columns={columns}
           pageSizeOptions={[5]}
           initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
-          checkboxSelection
           disableRowSelectionOnClick
           sx={{
             border: "none",
@@ -198,6 +209,57 @@ function DashboardPage() {
             "& .MuiDataGrid-cell:focus": { outline: "none" },
           }}
         />
+      </Paper>
+
+      {/* Location Map */}
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor: "divider",
+          overflow: "hidden",
+        }}
+      >
+        <Box sx={{ p: 3, pb: 2 }}>
+          <Typography variant="subtitle1" fontWeight={600}>
+            Location Map
+          </Typography>
+        </Box>
+        <Box sx={{ px: 3, pb: 3 }}>
+          <Box
+            sx={{
+              height: 360,
+              borderRadius: 3,
+              overflow: "hidden",
+              border: "1px solid",
+              borderColor: "divider",
+            }}
+          >
+            <MapContainer
+              center={mapCenter}
+              zoom={13}
+              scrollWheelZoom={false}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <CircleMarker
+                center={mapCenter}
+                radius={10}
+                pathOptions={{
+                  color: "#7a2f3b",
+                  fillColor: "#7a2f3b",
+                  fillOpacity: 0.85,
+                }}
+              >
+                <Popup>OpenStreetMap location preview</Popup>
+              </CircleMarker>
+            </MapContainer>
+          </Box>
+        </Box>
       </Paper>
     </Box>
   );
