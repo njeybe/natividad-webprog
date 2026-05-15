@@ -1,13 +1,13 @@
 [
   {
     "firstName": "JB",
-    "lastName": "Nativdad",
+    "lastName": "Natividad",
     "age": "20",
     "gender": "male",
     "contactNumber": "09171234561",
-    "email": "jb.nativdad@webprog.dev",
+    "email": "jb.natividad@webprog.dev",
     "role": "admin",
-    "username": "jbnativdad",
+    "username": "jbnatividad",
     "password": "Password1!",
     "address": "Manila, Metro Manila",
     "isActive": true

@@ -13,6 +13,7 @@ const Button = ({
   type = "button",
   variant = "secondary",
   className = "",
+  ...rest
 }) => {
   const classes = [
     "inline-flex items-center justify-center rounded-full border-2 border-[var(--color-border)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] transition",
@@ -24,14 +25,14 @@ const Button = ({
 
   if (to) {
     return (
-      <Link to={to} className={classes}>
+      <Link to={to} className={classes} {...rest}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} className={classes}>
+    <button type={type} className={classes} {...rest}>
       {children}
     </button>
   );

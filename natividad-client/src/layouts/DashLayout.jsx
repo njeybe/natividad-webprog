@@ -26,6 +26,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import ArticleIcon from "@mui/icons-material/Article";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 const dashTheme = createTheme({
@@ -58,7 +59,7 @@ const dashTheme = createTheme({
 
 const drawerWidth = 240;
 
-const dashboardNavItems = [
+const baseNavItems = [
   {
     label: "Dashboard",
     title: "Dashboard",
@@ -72,12 +73,22 @@ const dashboardNavItems = [
     icon: AssessmentIcon,
   },
   {
-    label: "Users",
-    title: "Users",
-    to: "/dashboard/users",
-    icon: PeopleIcon,
+    label: "Articles",
+    title: "Articles",
+    to: "/dashboard/articles",
+    icon: ArticleIcon,
   },
 ];
+
+const adminNavItem = {
+  label: "Users",
+  title: "Users",
+  to: "/dashboard/users",
+  icon: PeopleIcon,
+};
+
+const buildNavItems = (userType) =>
+  userType === "admin" ? [...baseNavItems, adminNavItem] : baseNavItems;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -183,18 +194,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const getPageTitle = (pathname) =>
-  dashboardNavItems.find(({ to }) => to === pathname)?.title ?? "Welcome";
-
 const DashLayout = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const pageTitle = getPageTitle(location.pathname);
   const navigate = useNavigate();
+
+  const userType = localStorage.getItem("type");
+  const firstName = localStorage.getItem("firstName") || "";
+  const dashboardNavItems = buildNavItems(userType);
+
+  const navMatch = dashboardNavItems.find(
+    ({ to }) => to === location.pathname,
+  );
+  const pageTitle = firstName
+    ? `Welcome, ${firstName}`
+    : (navMatch?.title ?? "Welcome");
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
-  const handleLogout = () => navigate("/");
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/auth/signin");
+  };
 
   return (
     <ThemeProvider theme={dashTheme}>

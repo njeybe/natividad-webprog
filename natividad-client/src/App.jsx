@@ -12,6 +12,8 @@ import DashLayout from "./layouts/DashLayout";
 import DashboardPage from "./pages/DashboardPages/DashboardPage";
 import ReportsPage from "./pages/DashboardPages/ReportsPage";
 import UsersPage from "./pages/DashboardPages/UsersPage";
+import DashArticleListPage from "./pages/DashboardPages/DashArticleListPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const routes = [
   {
@@ -19,22 +21,10 @@ const routes = [
     element: <Layout />,
     errorElement: <NotFoundPage />,
     children: [
-      {
-        path: "",
-        element: <HomePage />,
-      },
-      {
-        path: "about",
-        element: <AboutPage />,
-      },
-      {
-        path: "articles",
-        element: <ArticleListPage />,
-      },
-      {
-        path: "articles/:name",
-        element: <ArticlePage />,
-      },
+      { path: "", element: <HomePage /> },
+      { path: "about", element: <AboutPage /> },
+      { path: "articles", element: <ArticleListPage /> },
+      { path: "articles/:name", element: <ArticlePage /> },
     ],
   },
   {
@@ -42,32 +32,28 @@ const routes = [
     element: <AuthLayout />,
     errorElement: <NotFoundPage />,
     children: [
-      {
-        path: "signin",
-        element: <SignInPage />,
-      },
-      {
-        path: "signup",
-        element: <SignUpPage />,
-      },
+      { path: "signin", element: <SignInPage /> },
+      { path: "signup", element: <SignUpPage /> },
     ],
   },
   {
     path: "/dashboard",
-    element: <DashLayout />,
+    element: <ProtectedRoute allowedTypes={["admin", "editor"]} />,
     errorElement: <NotFoundPage />,
     children: [
       {
         path: "",
-        element: <DashboardPage />,
-      },
-      {
-        path: "reports",
-        element: <ReportsPage />,
-      },
-      {
-        path: "users",
-        element: <UsersPage />,
+        element: <DashLayout />,
+        children: [
+          { path: "", element: <DashboardPage /> },
+          { path: "reports", element: <ReportsPage /> },
+          { path: "articles", element: <DashArticleListPage /> },
+          {
+            path: "users",
+            element: <ProtectedRoute allowedTypes={["admin"]} />,
+            children: [{ path: "", element: <UsersPage /> }],
+          },
+        ],
       },
     ],
   },
