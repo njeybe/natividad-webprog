@@ -1,0 +1,18 @@
+# Logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Sensitive information
+.env
+*.key
