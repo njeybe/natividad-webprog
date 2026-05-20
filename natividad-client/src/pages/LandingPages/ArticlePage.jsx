@@ -19,7 +19,16 @@ function ArticlePage() {
     setError("");
     fetchArticleBySlug(name)
       .then(({ data }) => {
-        if (!cancelled) setArticle(data);
+        if (cancelled) return;
+        const normalized = {
+          ...data,
+          content: Array.isArray(data.content)
+            ? data.content
+            : data.content
+              ? [String(data.content)]
+              : [],
+        };
+        setArticle(normalized);
       })
       .catch((err) => {
         if (cancelled) return;
@@ -49,10 +58,6 @@ function ArticlePage() {
     );
   }
 
-  if (notFound || !article) {
-    return <NotFoundPage />;
-  }
-
   if (error) {
     return (
       <div className="flex w-full flex-col gap-6">
@@ -68,7 +73,11 @@ function ArticlePage() {
     );
   }
 
-  const prettyName = article.slug
+  if (notFound || !article) {
+    return <NotFoundPage />;
+  }
+
+  const prettyName = (article.slug || article.title || "")
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");

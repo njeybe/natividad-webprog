@@ -8,10 +8,11 @@ const ArticleList = ({ articles }) => {
         const excerpt = article.content?.[0]
           ? article.content[0].substring(0, 150)
           : "No description available.";
+        const slug = article.name || "";
 
         return (
           <article
-            key={article.name}
+            key={article.name || article.title || index}
             className="rounded-3xl border-2 border-(--color-border) bg-(--color-surface-alt) p-4"
           >
             <div className="flex aspect-4/3 items-center justify-center rounded-[1.25rem] bg-(--color-surface)">
@@ -45,7 +46,7 @@ const ArticleList = ({ articles }) => {
               {excerpt}
               {excerpt === "No description available." ? "" : "..."}
             </p>
-            <Link to={`/articles/${article.name}`}>
+            <Link to={`/articles/${encodeURIComponent(slug)}`}>
               <Button className="mt-4">Read More</Button>
             </Link>
           </article>
