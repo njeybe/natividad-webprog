@@ -114,6 +114,6 @@
     "username": "jedramos",
     "password": "Password1!",
     "address": "Manila, Metro Manila",
-    "isActive": false
+    "isActive": "true"
   }
 ]
