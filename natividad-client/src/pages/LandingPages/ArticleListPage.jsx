@@ -22,7 +22,9 @@ const ArticleListPage = () => {
           availability: a.availability,
           category: a.category,
           content: a.content || [],
-        }));
+          createdAt: a.createdAt || "",
+        }))
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
       setArticles(mapped);
       setError("");
     } catch (err) {
