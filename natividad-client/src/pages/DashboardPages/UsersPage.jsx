@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Alert,
   Box,
   Button,
   Chip,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -24,24 +23,68 @@ import { useTheme } from "@mui/material/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  fetchUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-} from "../../services/UserService";
+import usersSeed from "../../assets/users.json?raw";
 
 const roles = ["admin", "editor", "viewer"];
 const genders = ["male", "female", "other"];
+
+const loadUsers = () => {
+  try {
+    return {
+      users: JSON.parse(usersSeed).map((user, index) => ({
+        id: Number(user.id) || index + 1,
+        firstName: String(user.firstName ?? "").trim(),
+        lastName: String(user.lastName ?? "").trim(),
+        age: String(user.age ?? "").trim(),
+        gender: genders.includes(
+          String(user.gender ?? "")
+            .trim()
+            .toLowerCase(),
+        )
+          ? String(user.gender ?? "")
+              .trim()
+              .toLowerCase()
+          : "",
+        contactNumber: String(user.contactNumber ?? "").trim(),
+        email: String(user.email ?? "")
+          .trim()
+          .toLowerCase(),
+        role: roles.includes(
+          String(user.role ?? "")
+            .trim()
+            .toLowerCase(),
+        )
+          ? String(user.role ?? "")
+              .trim()
+              .toLowerCase()
+          : "editor",
+        username: String(user.username ?? "")
+          .trim()
+          .toLowerCase(),
+        password: String(user.password ?? ""),
+        address: String(user.address ?? "").trim(),
+        isActive: typeof user.isActive === "boolean" ? user.isActive : true,
+      })),
+      error: "",
+    };
+  } catch {
+    return {
+      users: [],
+      error: "Unable to read users from src/assets/users.json.",
+    };
+  }
+};
+
+const seed = loadUsers();
 
 const blankForm = {
   firstName: "",
   lastName: "",
   age: "",
   gender: "",
-  contactNum: "",
+  contactNumber: "",
   email: "",
-  type: "editor",
+  role: "editor",
   username: "",
   password: "",
   address: "",
@@ -51,66 +94,20 @@ const blankForm = {
 const labelize = (value) =>
   value ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : "";
 
-const normalize = (user) => ({
-  id: user._id,
-  _id: user._id,
-  firstName: String(user.firstName ?? "").trim(),
-  lastName: String(user.lastName ?? "").trim(),
-  age: String(user.age ?? "").trim(),
-  gender: String(user.gender ?? "")
-    .trim()
-    .toLowerCase(),
-  contactNum: String(user.contactNum ?? "").trim(),
-  email: String(user.email ?? "")
-    .trim()
-    .toLowerCase(),
-  type: String(user.type ?? "editor")
-    .trim()
-    .toLowerCase(),
-  username: String(user.username ?? "")
-    .trim()
-    .toLowerCase(),
-  address: String(user.address ?? "").trim(),
-  isActive: typeof user.isActive === "boolean" ? user.isActive : true,
-});
-
 const UsersPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState("");
+  const [users, setUsers] = useState(seed.users);
   const [modal, setModal] = useState({ open: false, id: null });
   const [form, setForm] = useState({ ...blankForm });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [submitError, setSubmitError] = useState("");
 
+  // Enhancement 2 — search & filter state
   const [search, setSearch] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [filterGender, setFilterGender] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-
-  const loadUsers = async () => {
-    setLoading(true);
-    setLoadError("");
-    try {
-      const { data } = await fetchUsers();
-      setUsers((data.users || []).map(normalize));
-    } catch (err) {
-      setLoadError(
-        err.response?.data?.message ||
-          err.message ||
-          "Unable to load users from the server.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   const filteredUsers = useMemo(() => {
     const q = search.toLowerCase();
@@ -121,7 +118,7 @@ const UsersPage = () => {
         u.lastName.toLowerCase().includes(q) ||
         u.email.toLowerCase().includes(q) ||
         u.username.toLowerCase().includes(q);
-      const matchRole = filterRole === "all" || u.type === filterRole;
+      const matchRole = filterRole === "all" || u.role === filterRole;
       const matchGender = filterGender === "all" || u.gender === filterGender;
       const matchStatus =
         filterStatus === "all" ||
@@ -133,18 +130,12 @@ const UsersPage = () => {
   const resetForm = () => {
     setForm({ ...blankForm });
     setErrors({});
-    setSubmitError("");
   };
 
   const openModal = (user) => {
-    setModal({ open: true, id: user ? user._id : null });
-    setForm(
-      user
-        ? { ...blankForm, ...user, password: "" }
-        : { ...blankForm },
-    );
+    setModal({ open: true, id: user ? (user.id ?? null) : null });
+    setForm(user ? { ...blankForm, ...user } : { ...blankForm });
     setErrors({});
-    setSubmitError("");
   };
 
   const closeModal = () => {
@@ -167,27 +158,23 @@ const UsersPage = () => {
     const nextErrors = {};
     const mustEmail = form.email.trim().toLowerCase();
     const username = form.username.trim().toLowerCase();
-    const isEdit = Boolean(modal.id);
 
     [
       ["firstName", "First name"],
       ["lastName", "Last name"],
       ["age", "Age"],
       ["gender", "Gender"],
-      ["contactNum", "Contact number"],
+      ["contactNumber", "Contact number"],
       ["email", "Email"],
-      ["type", "Role"],
+      ["role", "Role"],
       ["username", "Username"],
+      ["password", "Password"],
       ["address", "Address"],
     ].forEach(([key, label]) => {
-      if (!form[key]) {
+      if (!form[key] && key !== "isActive") {
         nextErrors[key] = `${label} is required`;
       }
     });
-
-    if (!isEdit && !form.password) {
-      nextErrors.password = "Password is required";
-    }
 
     if (!nextErrors.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mustEmail)) {
       nextErrors.email = "Enter a valid email address";
@@ -195,24 +182,25 @@ const UsersPage = () => {
 
     if (
       !nextErrors.email &&
-      users.some((u) => u._id !== modal.id && u.email === mustEmail)
+      users.some((u) => u.id !== modal.id && u.email === mustEmail)
     ) {
       nextErrors.email = "Email address already exists.";
     }
 
     if (
       !nextErrors.username &&
-      users.some((u) => u._id !== modal.id && u.username === username)
+      users.some((u) => u.id !== modal.id && u.username === username)
     ) {
       nextErrors.username = "Username already exists.";
     }
 
-    if (form.password && form.password.length < 8) {
+    // Enhancement 3 — beginner-friendly validation rules
+    if (!nextErrors.password && form.password.length < 8) {
       nextErrors.password = "Password must be at least 8 characters";
     }
 
-    if (!nextErrors.contactNum && !/^\d{11}$/.test(form.contactNum)) {
-      nextErrors.contactNum = "Contact number must be exactly 11 digits";
+    if (!nextErrors.contactNumber && !/^\d{11}$/.test(form.contactNumber)) {
+      nextErrors.contactNumber = "Contact number must be exactly 11 digits";
     }
 
     if (!nextErrors.age && !/^\d+$/.test(form.age.trim())) {
@@ -226,72 +214,56 @@ const UsersPage = () => {
     return nextErrors;
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    setSubmitError("");
     const nextErrors = validate();
+
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
       return;
     }
 
-    const payload = {
+    const nextUser = {
       firstName: form.firstName.trim(),
       lastName: form.lastName.trim(),
       age: form.age.trim(),
       gender: form.gender,
-      contactNum: form.contactNum.trim(),
+      contactNumber: form.contactNumber.trim(),
       email: form.email.trim().toLowerCase(),
-      type: form.type.trim().toLowerCase(),
+      role: form.role.trim().toLowerCase(),
       username: form.username.trim().toLowerCase(),
+      password: form.password,
       address: form.address.trim(),
       isActive: form.isActive,
     };
-    if (form.password) payload.password = form.password;
 
-    try {
-      if (modal.id) {
-        await updateUser(modal.id, payload);
-      } else {
-        await createUser(payload);
-      }
-      closeModal();
-      await loadUsers();
-    } catch (err) {
-      setSubmitError(
-        err.response?.data?.message ||
-          err.message ||
-          "Unable to save user. Please try again.",
-      );
-    }
+    setUsers((prev) =>
+      modal.id
+        ? prev.map((user) =>
+            user.id === modal.id ? { ...user, ...nextUser } : user,
+          )
+        : [
+            ...prev,
+            {
+              id:
+                prev.reduce(
+                  (max, user) => Math.max(max, Number(user.id) || 0),
+                  0,
+                ) + 1,
+              ...nextUser,
+            },
+          ],
+    );
+
+    closeModal();
   };
 
-  const toggleStatus = async (user) => {
-    try {
-      await updateUser(user._id, { isActive: !user.isActive });
-      await loadUsers();
-    } catch (err) {
-      setLoadError(
-        err.response?.data?.message ||
-          err.message ||
-          "Unable to update user status.",
-      );
-    }
-  };
-
-  const handleDelete = async (user) => {
-    if (!window.confirm(`Delete user ${user.firstName} ${user.lastName}?`))
-      return;
-    try {
-      await deleteUser(user._id);
-      await loadUsers();
-    } catch (err) {
-      setLoadError(
-        err.response?.data?.message ||
-          err.message ||
-          "Unable to delete user.",
-      );
-    }
+  const toggleStatus = (id) => {
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.id === id ? { ...user, isActive: !user.isActive } : user,
+      ),
+    );
   };
 
   const fieldProps = (name, label, extra = {}) => ({
@@ -306,38 +278,33 @@ const UsersPage = () => {
   });
 
   const columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-      valueGetter: (value, row) => String(row._id || "").slice(-6),
-    },
+    { field: "id", headerName: "ID", width: 50 },
     {
       field: "firstName",
       headerName: "Full Name",
-      width: 160,
+      width: 140,
       valueGetter: (value, row) => `${row.firstName} ${row.lastName}`.trim(),
     },
     { field: "username", headerName: "Username", width: 130 },
-    { field: "age", headerName: "Age", width: 60 },
+    { field: "age", headerName: "Age", width: 50 },
     {
       field: "gender",
       headerName: "Gender",
-      width: 90,
+      width: 75,
       valueGetter: (value, row) => labelize(row.gender),
     },
-    { field: "contactNum", headerName: "Phone", width: 130 },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "contactNumber", headerName: "Phone", width: 120 },
+    { field: "email", headerName: "Email", width: 180 },
     {
-      field: "type",
+      field: "role",
       headerName: "Role",
-      width: 90,
-      valueGetter: (value, row) => labelize(row.type),
+      width: 70,
+      valueGetter: (value, row) => labelize(row.role),
     },
     {
       field: "isActive",
       headerName: "Status",
-      width: 100,
+      width: 85,
       sortable: false,
       renderCell: (cell) => (
         <Chip
@@ -351,7 +318,7 @@ const UsersPage = () => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 210,
+      width: 145,
       sortable: false,
       filterable: false,
       renderCell: (cell) => (
@@ -373,17 +340,9 @@ const UsersPage = () => {
             size="small"
             variant="contained"
             color={cell.row.isActive ? "warning" : "success"}
-            onClick={() => toggleStatus(cell.row)}
+            onClick={() => toggleStatus(cell.row.id)}
           >
             {cell.row.isActive ? "Disable" : "Activate"}
-          </Button>
-          <Button
-            size="small"
-            variant="text"
-            color="error"
-            onClick={() => handleDelete(cell.row)}
-          >
-            Delete
           </Button>
         </Stack>
       ),
@@ -392,6 +351,7 @@ const UsersPage = () => {
 
   return (
     <Box sx={{ width: "100%", minWidth: 0, overflowX: "hidden" }}>
+      {/* Header */}
       <Box
         sx={{
           mb: 3,
@@ -408,9 +368,9 @@ const UsersPage = () => {
         </Button>
       </Box>
 
-      {loadError ? (
+      {seed.error ? (
         <Alert severity="error" sx={{ mb: 2 }}>
-          {loadError}
+          {seed.error}
         </Alert>
       ) : null}
 
@@ -425,6 +385,7 @@ const UsersPage = () => {
           borderRadius: 3,
         }}
       >
+        {/* Enhancement 2 — Search & Filter Row */}
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={2}
@@ -484,40 +445,35 @@ const UsersPage = () => {
         </Stack>
 
         <Box sx={{ width: "100%", minWidth: 0 }}>
-          {loading ? (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-              <CircularProgress />
-            </Box>
-          ) : (
-            <DataGrid
-              rows={filteredUsers}
-              columns={columns}
-              autoHeight
-              disableRowSelectionOnClick
-              pageSizeOptions={[5, 10]}
-              initialState={{
-                pagination: { paginationModel: { pageSize: 5, page: 0 } },
-              }}
-              sx={{
-                border: "none",
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "rgba(122,47,59,0.05)",
-                },
-                "& .MuiDataGrid-row:hover": {
-                  backgroundColor: "rgba(122,47,59,0.03)",
-                },
-                "& .MuiDataGrid-row.Mui-selected": {
-                  backgroundColor: "rgba(122,47,59,0.08)",
-                  "&:hover": { backgroundColor: "rgba(122,47,59,0.10)" },
-                },
-                "& .MuiDataGrid-cell:focus": { outline: "none" },
-                "& .MuiCheckbox-root.Mui-checked": { color: "primary.main" },
-              }}
-            />
-          )}
+          <DataGrid
+            rows={filteredUsers}
+            columns={columns}
+            autoHeight
+            disableRowSelectionOnClick
+            pageSizeOptions={[5, 10]}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 5, page: 0 } },
+            }}
+            sx={{
+              border: "none",
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "rgba(122,47,59,0.05)",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "rgba(122,47,59,0.03)",
+              },
+              "& .MuiDataGrid-row.Mui-selected": {
+                backgroundColor: "rgba(122,47,59,0.08)",
+                "&:hover": { backgroundColor: "rgba(122,47,59,0.10)" },
+              },
+              "& .MuiDataGrid-cell:focus": { outline: "none" },
+              "& .MuiCheckbox-root.Mui-checked": { color: "primary.main" },
+            }}
+          />
         </Box>
       </Paper>
 
+      {/* Add / Edit User Dialog */}
       <Dialog
         open={modal.open}
         onClose={closeModal}
@@ -528,11 +484,6 @@ const UsersPage = () => {
         <Box component="form" onSubmit={handleSubmit}>
           <DialogTitle>{modal.id ? "Edit User" : "Add User"}</DialogTitle>
           <DialogContent dividers sx={{ pt: 2 }}>
-            {submitError ? (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {submitError}
-              </Alert>
-            ) : null}
             <Stack spacing={2} sx={{ pt: 1 }}>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <TextField {...fieldProps("firstName", "First Name")} />
@@ -551,13 +502,13 @@ const UsersPage = () => {
                 </TextField>
               </Stack>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                <TextField {...fieldProps("contactNum", "Contact Number")} />
+                <TextField {...fieldProps("contactNumber", "Contact Number")} />
                 <TextField
                   {...fieldProps("email", "Email Address", { type: "email" })}
                 />
               </Stack>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                <TextField {...fieldProps("type", "Role", { select: true })}>
+                <TextField {...fieldProps("role", "Role", { select: true })}>
                   {roles.map((role) => (
                     <MenuItem key={role} value={role}>
                       {labelize(role)}
@@ -567,33 +518,27 @@ const UsersPage = () => {
                 <TextField {...fieldProps("username", "Username")} />
               </Stack>
               <TextField
-                {...fieldProps(
-                  "password",
-                  modal.id ? "New Password (leave blank to keep)" : "Password",
-                  {
-                    type: showPassword ? "text" : "password",
-                    slotProps: {
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              edge="end"
-                              onClick={() => setShowPassword((prev) => !prev)}
-                              onMouseDown={(event) => event.preventDefault()}
-                              aria-label={
-                                showPassword
-                                  ? "Hide password"
-                                  : "Show password"
-                              }
-                            >
-                              {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      },
+                {...fieldProps("password", "Password", {
+                  type: showPassword ? "text" : "password",
+                  slotProps: {
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            edge="end"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            onMouseDown={(event) => event.preventDefault()}
+                            aria-label={
+                              showPassword ? "Hide password" : "Show password"
+                            }
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     },
                   },
-                )}
+                })}
               />
               <TextField
                 {...fieldProps("address", "Address", {
