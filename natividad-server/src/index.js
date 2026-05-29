@@ -23,6 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRoutes);
 app.use("/api/articles", articleRoutes);
 
+app.get("/", (req, res) => {
+  res.json({ message: "Natividad WebProg API is running!" });
+});
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Server Error" });
