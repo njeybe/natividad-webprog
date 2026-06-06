@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Alert,
   Box,
   Button,
   Chip,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -23,68 +24,23 @@ import { useTheme } from "@mui/material/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { DataGrid } from "@mui/x-data-grid";
-import usersSeed from "../../assets/users.json?raw";
+import {
+  fetchUsers,
+  createUser,
+  updateUser,
+} from "../../services/UserService";
 
 const roles = ["admin", "editor", "viewer"];
 const genders = ["male", "female", "other"];
-
-const loadUsers = () => {
-  try {
-    return {
-      users: JSON.parse(usersSeed).map((user, index) => ({
-        id: Number(user.id) || index + 1,
-        firstName: String(user.firstName ?? "").trim(),
-        lastName: String(user.lastName ?? "").trim(),
-        age: String(user.age ?? "").trim(),
-        gender: genders.includes(
-          String(user.gender ?? "")
-            .trim()
-            .toLowerCase(),
-        )
-          ? String(user.gender ?? "")
-              .trim()
-              .toLowerCase()
-          : "",
-        contactNumber: String(user.contactNumber ?? "").trim(),
-        email: String(user.email ?? "")
-          .trim()
-          .toLowerCase(),
-        role: roles.includes(
-          String(user.role ?? "")
-            .trim()
-            .toLowerCase(),
-        )
-          ? String(user.role ?? "")
-              .trim()
-              .toLowerCase()
-          : "editor",
-        username: String(user.username ?? "")
-          .trim()
-          .toLowerCase(),
-        password: String(user.password ?? ""),
-        address: String(user.address ?? "").trim(),
-        isActive: typeof user.isActive === "boolean" ? user.isActive : true,
-      })),
-      error: "",
-    };
-  } catch {
-    return {
-      users: [],
-      error: "Unable to read users from src/assets/users.json.",
-    };
-  }
-};
-
-const seed = loadUsers();
 
 const blankForm = {
   firstName: "",
   lastName: "",
   age: "",
   gender: "",
-  contactNumber: "",
+  contactNum: "",
   email: "",
-  role: "editor",
+  type: "editor",
   username: "",
   password: "",
   address: "",
@@ -97,28 +53,56 @@ const labelize = (value) =>
 const UsersPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [users, setUsers] = useState(seed.users);
+
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
+  const [saving, setSaving] = useState(false);
+
   const [modal, setModal] = useState({ open: false, id: null });
   const [form, setForm] = useState({ ...blankForm });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
-  // Enhancement 2 — search & filter state
   const [search, setSearch] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [filterGender, setFilterGender] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
 
+  // ── Fetch users from MongoDB on mount ──────────────────────────────────────
+  const loadUsers = useCallback(async () => {
+    setLoading(true);
+    setApiError("");
+    try {
+      const { data } = await fetchUsers();
+      // Normalize _id → id for DataGrid
+      setUsers(
+        (data.users || []).map((u) => ({ ...u, id: u._id }))
+      );
+    } catch (err) {
+      setApiError(
+        err?.response?.data?.message || "Failed to load users from server."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
+  // ── Filtering ───────────────────────────────────────────────────────────────
   const filteredUsers = useMemo(() => {
     const q = search.toLowerCase();
     return users.filter((u) => {
       const matchSearch =
         !q ||
-        u.firstName.toLowerCase().includes(q) ||
-        u.lastName.toLowerCase().includes(q) ||
-        u.email.toLowerCase().includes(q) ||
-        u.username.toLowerCase().includes(q);
-      const matchRole = filterRole === "all" || u.role === filterRole;
+        (u.firstName || "").toLowerCase().includes(q) ||
+        (u.lastName || "").toLowerCase().includes(q) ||
+        (u.email || "").toLowerCase().includes(q) ||
+        (u.username || "").toLowerCase().includes(q);
+      const matchRole = filterRole === "all" || u.type === filterRole;
       const matchGender = filterGender === "all" || u.gender === filterGender;
       const matchStatus =
         filterStatus === "all" ||
@@ -127,14 +111,31 @@ const UsersPage = () => {
     });
   }, [users, search, filterRole, filterGender, filterStatus]);
 
+  // ── Modal helpers ───────────────────────────────────────────────────────────
   const resetForm = () => {
     setForm({ ...blankForm });
     setErrors({});
   };
 
   const openModal = (user) => {
-    setModal({ open: true, id: user ? (user.id ?? null) : null });
-    setForm(user ? { ...blankForm, ...user } : { ...blankForm });
+    setModal({ open: true, id: user ? (user._id ?? null) : null });
+    if (user) {
+      setForm({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        age: user.age || "",
+        gender: user.gender || "",
+        contactNum: user.contactNum || "",
+        email: user.email || "",
+        type: user.type || "editor",
+        username: user.username || "",
+        password: "",           // never pre-fill password
+        address: user.address || "",
+        isActive: user.isActive ?? true,
+      });
+    } else {
+      setForm({ ...blankForm });
+    }
     setErrors({});
   };
 
@@ -154,6 +155,7 @@ const UsersPage = () => {
     }
   };
 
+  // ── Validation ──────────────────────────────────────────────────────────────
   const validate = () => {
     const nextErrors = {};
     const mustEmail = form.email.trim().toLowerCase();
@@ -164,49 +166,44 @@ const UsersPage = () => {
       ["lastName", "Last name"],
       ["age", "Age"],
       ["gender", "Gender"],
-      ["contactNumber", "Contact number"],
+      ["contactNum", "Contact number"],
       ["email", "Email"],
-      ["role", "Role"],
+      ["type", "Role"],
       ["username", "Username"],
-      ["password", "Password"],
       ["address", "Address"],
     ].forEach(([key, label]) => {
-      if (!form[key] && key !== "isActive") {
-        nextErrors[key] = `${label} is required`;
-      }
+      if (!form[key]) nextErrors[key] = `${label} is required`;
     });
+
+    // Password required only when adding
+    if (!modal.id && !form.password) {
+      nextErrors.password = "Password is required";
+    }
+    if (!nextErrors.password && form.password && form.password.length < 8) {
+      nextErrors.password = "Password must be at least 8 characters";
+    }
 
     if (!nextErrors.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mustEmail)) {
       nextErrors.email = "Enter a valid email address";
     }
-
     if (
       !nextErrors.email &&
-      users.some((u) => u.id !== modal.id && u.email === mustEmail)
+      users.some((u) => u._id !== modal.id && u.email === mustEmail)
     ) {
       nextErrors.email = "Email address already exists.";
     }
-
     if (
       !nextErrors.username &&
-      users.some((u) => u.id !== modal.id && u.username === username)
+      users.some((u) => u._id !== modal.id && u.username === username)
     ) {
       nextErrors.username = "Username already exists.";
     }
-
-    // Enhancement 3 — beginner-friendly validation rules
-    if (!nextErrors.password && form.password.length < 8) {
-      nextErrors.password = "Password must be at least 8 characters";
+    if (!nextErrors.contactNum && !/^\d{11}$/.test(form.contactNum)) {
+      nextErrors.contactNum = "Contact number must be exactly 11 digits";
     }
-
-    if (!nextErrors.contactNumber && !/^\d{11}$/.test(form.contactNumber)) {
-      nextErrors.contactNumber = "Contact number must be exactly 11 digits";
-    }
-
     if (!nextErrors.age && !/^\d+$/.test(form.age.trim())) {
       nextErrors.age = "Age must be a number only";
     }
-
     if (!nextErrors.username && /\s/.test(form.username)) {
       nextErrors.username = "Username must not contain spaces";
     }
@@ -214,56 +211,58 @@ const UsersPage = () => {
     return nextErrors;
   };
 
-  const handleSubmit = (event) => {
+  // ── Submit (Create / Update) ────────────────────────────────────────────────
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = validate();
-
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
       return;
     }
 
-    const nextUser = {
+    const payload = {
       firstName: form.firstName.trim(),
       lastName: form.lastName.trim(),
       age: form.age.trim(),
       gender: form.gender,
-      contactNumber: form.contactNumber.trim(),
+      contactNum: form.contactNum.trim(),
       email: form.email.trim().toLowerCase(),
-      role: form.role.trim().toLowerCase(),
+      type: form.type,
       username: form.username.trim().toLowerCase(),
-      password: form.password,
       address: form.address.trim(),
       isActive: form.isActive,
     };
 
-    setUsers((prev) =>
-      modal.id
-        ? prev.map((user) =>
-            user.id === modal.id ? { ...user, ...nextUser } : user,
-          )
-        : [
-            ...prev,
-            {
-              id:
-                prev.reduce(
-                  (max, user) => Math.max(max, Number(user.id) || 0),
-                  0,
-                ) + 1,
-              ...nextUser,
-            },
-          ],
-    );
+    // Only include password if provided (edit mode may leave it blank)
+    if (form.password) payload.password = form.password;
 
-    closeModal();
+    setSaving(true);
+    setApiError("");
+    try {
+      if (modal.id) {
+        await updateUser(modal.id, payload);
+      } else {
+        await createUser(payload);
+      }
+      await loadUsers(); // re-fetch from DB
+      closeModal();
+    } catch (err) {
+      setApiError(
+        err?.response?.data?.message || "Failed to save user. Please try again."
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const toggleStatus = (id) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, isActive: !user.isActive } : user,
-      ),
-    );
+  // ── Toggle active status ────────────────────────────────────────────────────
+  const toggleStatus = async (user) => {
+    try {
+      await updateUser(user._id, { isActive: !user.isActive });
+      await loadUsers();
+    } catch {
+      setApiError("Failed to update user status.");
+    }
   };
 
   const fieldProps = (name, label, extra = {}) => ({
@@ -277,34 +276,34 @@ const UsersPage = () => {
     ...extra,
   });
 
+  // ── DataGrid columns ────────────────────────────────────────────────────────
   const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "username", headerName: "Username", width: 130 },
     {
       field: "firstName",
       headerName: "Full Name",
-      width: 140,
+      width: 150,
       valueGetter: (value, row) => `${row.firstName} ${row.lastName}`.trim(),
     },
-    { field: "username", headerName: "Username", width: 130 },
-    { field: "age", headerName: "Age", width: 50 },
+    { field: "age", headerName: "Age", width: 55 },
     {
       field: "gender",
       headerName: "Gender",
-      width: 75,
+      width: 80,
       valueGetter: (value, row) => labelize(row.gender),
     },
-    { field: "contactNumber", headerName: "Phone", width: 120 },
-    { field: "email", headerName: "Email", width: 180 },
+    { field: "contactNum", headerName: "Phone", width: 125 },
+    { field: "email", headerName: "Email", width: 200 },
     {
-      field: "role",
+      field: "type",
       headerName: "Role",
-      width: 70,
-      valueGetter: (value, row) => labelize(row.role),
+      width: 75,
+      valueGetter: (value, row) => labelize(row.type),
     },
     {
       field: "isActive",
       headerName: "Status",
-      width: 85,
+      width: 90,
       sortable: false,
       renderCell: (cell) => (
         <Chip
@@ -318,16 +317,11 @@ const UsersPage = () => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 145,
+      width: 150,
       sortable: false,
       filterable: false,
       renderCell: (cell) => (
-        <Stack
-          direction="row"
-          spacing={0.5}
-          alignItems="center"
-          sx={{ py: 0.5 }}
-        >
+        <Stack direction="row" spacing={0.5} alignItems="center" sx={{ py: 0.5 }}>
           <Button
             size="small"
             variant="outlined"
@@ -340,7 +334,7 @@ const UsersPage = () => {
             size="small"
             variant="contained"
             color={cell.row.isActive ? "warning" : "success"}
-            onClick={() => toggleStatus(cell.row.id)}
+            onClick={() => toggleStatus(cell.row)}
           >
             {cell.row.isActive ? "Disable" : "Activate"}
           </Button>
@@ -349,6 +343,7 @@ const UsersPage = () => {
     },
   ];
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <Box sx={{ width: "100%", minWidth: 0, overflowX: "hidden" }}>
       {/* Header */}
@@ -368,9 +363,9 @@ const UsersPage = () => {
         </Button>
       </Box>
 
-      {seed.error ? (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {seed.error}
+      {apiError ? (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setApiError("")}>
+          {apiError}
         </Alert>
       ) : null}
 
@@ -385,7 +380,7 @@ const UsersPage = () => {
           borderRadius: 3,
         }}
       >
-        {/* Enhancement 2 — Search & Filter Row */}
+        {/* Search & Filter Row */}
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={2}
@@ -445,31 +440,36 @@ const UsersPage = () => {
         </Stack>
 
         <Box sx={{ width: "100%", minWidth: 0 }}>
-          <DataGrid
-            rows={filteredUsers}
-            columns={columns}
-            autoHeight
-            disableRowSelectionOnClick
-            pageSizeOptions={[5, 10]}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 5, page: 0 } },
-            }}
-            sx={{
-              border: "none",
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "rgba(122,47,59,0.05)",
-              },
-              "& .MuiDataGrid-row:hover": {
-                backgroundColor: "rgba(122,47,59,0.03)",
-              },
-              "& .MuiDataGrid-row.Mui-selected": {
-                backgroundColor: "rgba(122,47,59,0.08)",
-                "&:hover": { backgroundColor: "rgba(122,47,59,0.10)" },
-              },
-              "& .MuiDataGrid-cell:focus": { outline: "none" },
-              "& .MuiCheckbox-root.Mui-checked": { color: "primary.main" },
-            }}
-          />
+          {loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <DataGrid
+              rows={filteredUsers}
+              columns={columns}
+              autoHeight
+              disableRowSelectionOnClick
+              pageSizeOptions={[5, 10]}
+              initialState={{
+                pagination: { paginationModel: { pageSize: 5, page: 0 } },
+              }}
+              sx={{
+                border: "none",
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "rgba(122,47,59,0.05)",
+                },
+                "& .MuiDataGrid-row:hover": {
+                  backgroundColor: "rgba(122,47,59,0.03)",
+                },
+                "& .MuiDataGrid-row.Mui-selected": {
+                  backgroundColor: "rgba(122,47,59,0.08)",
+                  "&:hover": { backgroundColor: "rgba(122,47,59,0.10)" },
+                },
+                "& .MuiDataGrid-cell:focus": { outline: "none" },
+              }}
+            />
+          )}
         </Box>
       </Paper>
 
@@ -491,9 +491,7 @@ const UsersPage = () => {
               </Stack>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <TextField {...fieldProps("age", "Age")} />
-                <TextField
-                  {...fieldProps("gender", "Gender", { select: true })}
-                >
+                <TextField {...fieldProps("gender", "Gender", { select: true })}>
                   {genders.map((gender) => (
                     <MenuItem key={gender} value={gender}>
                       {labelize(gender)}
@@ -502,13 +500,13 @@ const UsersPage = () => {
                 </TextField>
               </Stack>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                <TextField {...fieldProps("contactNumber", "Contact Number")} />
+                <TextField {...fieldProps("contactNum", "Contact Number")} />
                 <TextField
                   {...fieldProps("email", "Email Address", { type: "email" })}
                 />
               </Stack>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                <TextField {...fieldProps("role", "Role", { select: true })}>
+                <TextField {...fieldProps("type", "Role", { select: true })}>
                   {roles.map((role) => (
                     <MenuItem key={role} value={role}>
                       {labelize(role)}
@@ -520,6 +518,9 @@ const UsersPage = () => {
               <TextField
                 {...fieldProps("password", "Password", {
                   type: showPassword ? "text" : "password",
+                  helperText:
+                    errors.password ||
+                    (modal.id ? "Leave blank to keep current password" : ""),
                   slotProps: {
                     input: {
                       endAdornment: (
@@ -527,7 +528,7 @@ const UsersPage = () => {
                           <IconButton
                             edge="end"
                             onClick={() => setShowPassword((prev) => !prev)}
-                            onMouseDown={(event) => event.preventDefault()}
+                            onMouseDown={(e) => e.preventDefault()}
                             aria-label={
                               showPassword ? "Hide password" : "Show password"
                             }
@@ -555,17 +556,23 @@ const UsersPage = () => {
                   />
                 }
                 label={
-                  form.isActive
-                    ? "User status: Active"
-                    : "User status: Inactive"
+                  form.isActive ? "User status: Active" : "User status: Inactive"
                 }
               />
             </Stack>
           </DialogContent>
           <DialogActions sx={{ py: 2 }}>
-            <Button onClick={closeModal}>Cancel</Button>
-            <Button type="submit" variant="contained">
-              {modal.id ? "Update User" : "Save User"}
+            <Button onClick={closeModal} disabled={saving}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" disabled={saving}>
+              {saving ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : modal.id ? (
+                "Update User"
+              ) : (
+                "Save User"
+              )}
             </Button>
           </DialogActions>
         </Box>
