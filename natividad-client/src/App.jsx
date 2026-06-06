@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import ArticlePage from "./pages/LandingPages/ArticlePage";
 import HomePage from "./pages/LandingPages/HomePage";
@@ -18,10 +18,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const routes = [
   {
     path: "/",
+    element: <Navigate to="/auth/signin" replace />,
+  },
+  {
+    path: "/",
     element: <Layout />,
     errorElement: <NotFoundPage />,
     children: [
-      { path: "", element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
       { path: "articles", element: <ArticleListPage /> },
       { path: "articles/:name", element: <ArticlePage /> },
